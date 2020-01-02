@@ -7,9 +7,8 @@ const applications = require("./routes/api/applications");
 const app = express();
 app.use(express.json());
 
-// DB Congig
-if (process.env.NODE_ENV === " production") process.env.mongoURI;
-else const db = require("./config/keys").mongoURI;
+// DB Config
+const db = process.env.mongoURI || require("./config/keys").mongoURI;
 
 // Connect to Mongo
 mongoose
@@ -21,7 +20,7 @@ mongoose
 app.use("/api/applications", applications);
 
 // Serve static assets if in production
-if (process.env.NODE_ENV === " production") {
+if (process.env.NODE_ENV === "production") {
   // Set static folder
   app.use(express.static("client/build"));
 

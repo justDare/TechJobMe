@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../../middleware/auth");
 
 // Application Model
 const Application = require("../../models/Application");
@@ -15,8 +16,8 @@ router.get("/", (req, res) => {
 
 // @route POST api/applications
 // @desc Create A Application
-// @access Public
-router.post("/", (req, res) => {
+// @access Private
+router.post("/", auth, (req, res) => {
   const newApplication = new Application({
     name: req.body.name
   });
@@ -26,8 +27,8 @@ router.post("/", (req, res) => {
 
 // @route DELETE api/applications
 // @desc Delete A Application
-// @access Public
-router.delete("/:id", (req, res) => {
+// @access Private
+router.delete("/:id", auth, (req, res) => {
   Application.findById(req.params.id)
     .then(application =>
       application.remove().then(() => res.json({ success: true }))

@@ -1,4 +1,3 @@
-import uuid from "uuid";
 import {
   GET_APPLICATIONS,
   ADD_APPLICATION,

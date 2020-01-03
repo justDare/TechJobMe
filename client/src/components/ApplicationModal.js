@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Button,
   Modal,
@@ -8,14 +8,19 @@ import {
   FormGroup,
   Label,
   Input
-} from "reactstrap";
-import { connect } from "react-redux";
-import { addApplication } from "../actions/applicationActions";
+} from 'reactstrap';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { addApplication } from '../actions/applicationActions';
 
 class ApplicationModal extends Component {
   state = {
     modal: false,
-    name: ""
+    name: ''
+  };
+
+  static propTypes = {
+    user_id: PropTypes.string
   };
 
   toggle = () => {
@@ -32,7 +37,8 @@ class ApplicationModal extends Component {
     e.preventDefault();
 
     const newApplication = {
-      name: this.state.name
+      name: this.state.name,
+      user_id: this.props.user_id
     };
 
     // Add application via add application action
@@ -47,7 +53,7 @@ class ApplicationModal extends Component {
       <div>
         <Button
           color="dark"
-          style={{ marginBottom: "2rem" }}
+          style={{ marginBottom: '2rem' }}
           onClick={this.toggle}
         >
           Add Application
@@ -65,7 +71,7 @@ class ApplicationModal extends Component {
                   placeholder="Add Application"
                   onChange={this.onChange}
                 />
-                <Button color="dark" style={{ marginTop: "2rem" }} block>
+                <Button color="dark" style={{ marginTop: '2rem' }} block>
                   Add Application
                 </Button>
               </FormGroup>
@@ -78,7 +84,8 @@ class ApplicationModal extends Component {
 }
 
 const mapStateToProps = state => ({
-  item: state.application
+  application: state.application,
+  user_id: state.auth.user._id
 });
 
 export default connect(mapStateToProps, { addApplication })(ApplicationModal);

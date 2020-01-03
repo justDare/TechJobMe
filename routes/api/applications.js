@@ -1,14 +1,14 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const auth = require("../../middleware/auth");
+const auth = require('../../middleware/auth');
 
 // Application Model
-const Application = require("../../models/Application");
+const Application = require('../../models/Application');
 
 // @route GET api/applications
 // @desc GET All applications
 // @access Public
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
   Application.find()
     .sort({ date: -1 })
     .then(applications => res.json(applications));
@@ -17,9 +17,10 @@ router.get("/", (req, res) => {
 // @route POST api/applications
 // @desc Create A Application
 // @access Private
-router.post("/", auth, (req, res) => {
+router.post('/', auth, (req, res) => {
   const newApplication = new Application({
-    name: req.body.name
+    name: req.body.name,
+    user_id: req.body.user_id
   });
 
   newApplication.save().then(application => res.json(application));
@@ -28,7 +29,7 @@ router.post("/", auth, (req, res) => {
 // @route DELETE api/applications
 // @desc Delete A Application
 // @access Private
-router.delete("/:id", auth, (req, res) => {
+router.delete('/:id', auth, (req, res) => {
   Application.findById(req.params.id)
     .then(application =>
       application.remove().then(() => res.json({ success: true }))

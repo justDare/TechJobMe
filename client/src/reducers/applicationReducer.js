@@ -1,5 +1,6 @@
 import {
   GET_APPLICATIONS,
+  CLEAR_APPLICATIONS,
   ADD_APPLICATION,
   DELETE_APPLICATION,
   APPLICATIONS_LOADING
@@ -15,7 +16,13 @@ export default function(state = initialState, action) {
     case GET_APPLICATIONS:
       return {
         ...state,
-        applications: [action.payload],
+        applications: action.payload,
+        loading: false
+      };
+    case CLEAR_APPLICATIONS:
+      return {
+        ...state,
+        applications: [],
         loading: false
       };
     case DELETE_APPLICATION:
@@ -35,6 +42,7 @@ export default function(state = initialState, action) {
         ...state,
         loading: true
       };
+
     default:
       return state;
   }

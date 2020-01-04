@@ -20,7 +20,7 @@ class ApplicationModal extends Component {
   };
 
   static propTypes = {
-    user_id: PropTypes.string
+    auth: PropTypes.object
   };
 
   toggle = () => {
@@ -38,7 +38,7 @@ class ApplicationModal extends Component {
 
     const newApplication = {
       name: this.state.name,
-      user_id: this.props.user_id
+      user_id: this.props.auth.user._id
     };
 
     // Add application via add application action
@@ -85,7 +85,7 @@ class ApplicationModal extends Component {
 
 const mapStateToProps = state => ({
   application: state.application,
-  user_id: state.auth.user._id
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { addApplication })(ApplicationModal);

@@ -3,7 +3,8 @@ import {
   GET_APPLICATIONS,
   ADD_APPLICATION,
   DELETE_APPLICATION,
-  APPLICATIONS_LOADING
+  APPLICATIONS_LOADING,
+  CLEAR_APPLICATIONS
 } from './types';
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
@@ -54,5 +55,11 @@ export const addApplication = application => (dispatch, getState) => {
 export const setApplicationsLoading = () => {
   return {
     type: APPLICATIONS_LOADING
+  };
+};
+
+export const clearApplications = () => {
+  return {
+    type: CLEAR_APPLICATIONS
   };
 };

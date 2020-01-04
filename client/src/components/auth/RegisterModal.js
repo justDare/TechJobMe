@@ -8,7 +8,6 @@ import {
   FormGroup,
   Label,
   Input,
-  NavLink,
   Alert
 } from 'reactstrap';
 import { connect } from 'react-redux';
@@ -79,10 +78,17 @@ class RegisterModal extends Component {
 
   render() {
     return (
-      <div>
-        <NavLink onClick={this.toggle} href="#">
-          Register
-        </NavLink>
+      <div className="text-center">
+        <div>
+          Don't have an account?
+          <span
+            className="text-primary"
+            onClick={this.toggle}
+            style={{ cursor: 'pointer' }}
+          >
+            &nbsp; Register
+          </span>
+        </div>
 
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Register</ModalHeader>

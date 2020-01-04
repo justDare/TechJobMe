@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import DashBoard from './components/DashBoard';
 import LoginLanding from './components/auth/LoginLanding';

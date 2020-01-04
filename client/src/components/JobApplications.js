@@ -9,8 +9,13 @@ import {
 import PropTypes from 'prop-types';
 
 class JobApplications extends Component {
+  state = {
+    applicationsLoaded: false
+  };
+
   componentDidMount() {
-    this.props.getApplications();
+    const user = this.props.auth.user;
+    if (user) this.props.getApplications(user._id);
   }
 
   onDeleteClick = id => {
@@ -46,11 +51,14 @@ class JobApplications extends Component {
 
 JobApplications.propTypes = {
   getApplications: PropTypes.func.isRequired,
-  application: PropTypes.object.isRequired
+  application: PropTypes.object.isRequired,
+  user: PropTypes.object,
+  auth: PropTypes.object
 };
 
 const mapStateToProps = state => ({
-  application: state.application
+  application: state.application,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { getApplications, deleteApplication })(

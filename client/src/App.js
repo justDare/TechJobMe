@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import AppNavbar from './components/AppNavbar';
-import JobApplications from './components/JobApplications';
-import ApplicationModal from './components/ApplicationModal';
-import { Container } from 'reactstrap';
+import { HashRouter as Router, Route } from 'react-router-dom';
 
+import DashBoard from './components/DashBoard';
+import LoginLanding from './components/auth/LoginLanding';
 import { Provider } from 'react-redux';
 import store from './store';
 import { loadUser } from './actions/authActions';
@@ -19,13 +18,12 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <div className="App">
-          <AppNavbar />
-          <Container>
-            <ApplicationModal />
-            <JobApplications />
-          </Container>
-        </div>
+        <Router>
+          <div className="App">
+            <Route exact path="/" component={LoginLanding} />
+            <Route exact path="/dashboard" component={DashBoard} />
+          </div>
+        </Router>
       </Provider>
     );
   }

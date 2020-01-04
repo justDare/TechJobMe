@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { ListGroup, ListGroupItem, Button } from "reactstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { ListGroup, ListGroupItem, Button } from 'reactstrap';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { connect } from 'react-redux';
 import {
   getApplications,
   deleteApplication
-} from "../actions/applicationActions";
-import PropTypes from "prop-types";
+} from '../actions/applicationActions';
+import PropTypes from 'prop-types';
 
 class JobApplications extends Component {
   componentDidMount() {

@@ -3,7 +3,7 @@ import {
   ADD_APPLICATION,
   DELETE_APPLICATION,
   APPLICATIONS_LOADING
-} from "../actions/types";
+} from '../actions/types';
 
 const initialState = {
   applications: [],
@@ -15,7 +15,7 @@ export default function(state = initialState, action) {
     case GET_APPLICATIONS:
       return {
         ...state,
-        applications: action.payload,
+        applications: [action.payload],
         loading: false
       };
     case DELETE_APPLICATION:

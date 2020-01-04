@@ -7,9 +7,9 @@ const Application = require('../../models/Application');
 
 // @route GET api/applications
 // @desc GET All applications
-// @access Public
-router.get('/', (req, res) => {
-  Application.find()
+// @access Private
+router.get('/:id', auth, (req, res) => {
+  Application.find({ user_id: req.params.id })
     .sort({ date: -1 })
     .then(applications => res.json(applications));
 });

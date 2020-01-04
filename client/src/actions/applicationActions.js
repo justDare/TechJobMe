@@ -8,10 +8,10 @@ import {
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
 
-export const getApplications = () => dispatch => {
+export const getApplications = id => (dispatch, getState) => {
   dispatch(setApplicationsLoading());
   axios
-    .get('/api/applications')
+    .get(`/api/applications/${id}`, tokenConfig(getState))
     .then(res =>
       dispatch({
         type: GET_APPLICATIONS,

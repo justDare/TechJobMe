@@ -1,29 +1,29 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // JWT Config
-const jwtSecret = process.env.JWT || require("../../config/keys").jwt;
+const jwtSecret = process.env.JWT || require('../../config/keys').jwt;
 
 // Application Model
-const User = require("../../models/User");
+const User = require('../../models/User');
 
 // @route GET api/users
 // @desc  Register new User
 // @access Public
-router.post("/", (req, res) => {
+router.post('/', (req, res) => {
   const { name, email, password } = req.body;
 
   // Simple evalidation
   if (!name || !email || !password) {
-    return res.status(400).json({ msg: "Please enter all fields." });
+    return res.status(400).json({ msg: 'Please enter all fields.' });
   }
 
   // Check for existing user
   User.findOne({ email }).then(user => {
     if (user) {
-      return res.status(400).json({ msg: "User already exists." });
+      return res.status(400).json({ msg: 'User already exists.' });
     }
 
     const newUser = new User({
@@ -47,7 +47,7 @@ router.post("/", (req, res) => {
               res.json({
                 token,
                 user: {
-                  id: user.id,
+                  _id: user.id,
                   name: user.name,
                   email: user.email
                 }

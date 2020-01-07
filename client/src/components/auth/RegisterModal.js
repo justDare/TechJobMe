@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { register } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
+import { Redirect } from 'react-router-dom';
 
 class RegisterModal extends Component {
   state = {
@@ -44,7 +45,8 @@ class RegisterModal extends Component {
 
     // If authenticated, close modal
     if (this.state.modal && isAuthenticated) {
-      this.toggle();
+      // If authenticated, redirect to dashboard
+      return <Redirect to="/dashboard" />;
     }
   }
 

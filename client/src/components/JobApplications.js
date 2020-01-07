@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   getApplications,
   deleteApplication
@@ -9,16 +10,13 @@ import {
 import PropTypes from 'prop-types';
 
 class JobApplications extends Component {
-  state = {
-    applicationsLoaded: false
-  };
-
   componentDidMount() {
     const user = this.props.auth.user;
     if (user) this.props.getApplications(user._id);
   }
 
-  onDeleteClick = id => {
+  onDeleteClick = (id, e) => {
+    e.preventDefault();
     this.props.deleteApplication(id);
   };
 
@@ -28,19 +26,32 @@ class JobApplications extends Component {
     return (
       <ListGroup>
         <TransitionGroup className="job-applications">
-          {applications.map(({ _id, name }) => (
-            <CSSTransition key={_id} timeout={500} classNames="fade">
-              <ListGroupItem>
-                <Button
-                  className="remove-btn"
-                  color="danger"
-                  size="small"
-                  onClick={this.onDeleteClick.bind(this, _id)}
-                >
-                  &times;
-                </Button>
-                {name}
-              </ListGroupItem>
+          {applications.map(application => (
+            <CSSTransition
+              key={application._id}
+              timeout={500}
+              classNames="fade"
+            >
+              <Link
+                to={{
+                  pathname: '/application',
+                  state: {
+                    application: application
+                  }
+                }}
+              >
+                <ListGroupItem>
+                  <Button
+                    className="remove-btn"
+                    color="danger"
+                    size="small"
+                    onClick={this.onDeleteClick.bind(this, application._id)}
+                  >
+                    &times;
+                  </Button>
+                  {application.name}
+                </ListGroupItem>
+              </Link>
             </CSSTransition>
           ))}
         </TransitionGroup>

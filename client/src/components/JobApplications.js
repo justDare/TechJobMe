@@ -34,7 +34,7 @@ class JobApplications extends Component {
             >
               <Link
                 to={{
-                  pathname: '/application',
+                  pathname: `/application/${application._id}`,
                   state: {
                     application: application
                   }

@@ -33,7 +33,7 @@ export class Application extends Component {
   render() {
     const application = this.props.application;
     const fields = this.getFields();
-    console.log();
+
     return (
       <div>
         <AppNavbar />
@@ -56,11 +56,10 @@ Application.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  application: _.find(
-    state.application.applications,
+  application: _.find(state.application.applications, [
     "_id",
     ownProps.match.params._id
-  )
+  ])
 });
 
 export default connect(mapStateToProps)(Application);

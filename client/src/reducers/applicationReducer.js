@@ -2,9 +2,10 @@ import {
   GET_APPLICATIONS,
   CLEAR_APPLICATIONS,
   ADD_APPLICATION,
+  ADD_APPLICATION_FAIL,
   DELETE_APPLICATION,
   APPLICATIONS_LOADING
-} from '../actions/types';
+} from "../actions/types";
 
 const initialState = {
   applications: [],
@@ -18,6 +19,10 @@ export default function(state = initialState, action) {
         ...state,
         applications: action.payload,
         loading: false
+      };
+    case ADD_APPLICATION_FAIL:
+      return {
+        ...state
       };
     case CLEAR_APPLICATIONS:
       return {

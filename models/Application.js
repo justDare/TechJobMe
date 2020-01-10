@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
@@ -15,7 +15,19 @@ const ApplicationSchema = new Schema({
   user_id: {
     type: ObjectId,
     required: true
+  },
+  position: {
+    type: String,
+    required: true
+  },
+  link: {
+    type: String,
+    required: false
+  },
+  contact: {
+    type: String,
+    required: false
   }
 });
 
-module.exports = Application = mongoose.model('Application', ApplicationSchema);
+module.exports = Application = mongoose.model("Application", ApplicationSchema);

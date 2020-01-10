@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Button,
   Modal,
@@ -9,19 +9,20 @@ import {
   Label,
   Input,
   Alert
-} from 'reactstrap';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { register } from '../../actions/authActions';
-import { clearErrors } from '../../actions/errorActions';
-import { Redirect } from 'react-router-dom';
+} from "reactstrap";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { register } from "../../actions/authActions";
+import { clearErrors } from "../../actions/errorActions";
+import { Redirect } from "react-router-dom";
 
 class RegisterModal extends Component {
   state = {
     modal: false,
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
+    passwordCheck: "",
     msg: null
   };
 
@@ -36,16 +37,15 @@ class RegisterModal extends Component {
     const { error, isAuthenticated } = this.props;
     if (error !== prevProps.error) {
       // Check for register error
-      if (error.id === 'REGISTER_FAIL') {
+      if (error.id === "REGISTER_FAIL") {
         this.setState({ msg: error.msg.msg });
       } else {
         this.setState({ msg: null });
       }
     }
 
-    // If authenticated, close modal
+    // If authenticated, redirect to dashboard
     if (this.state.modal && isAuthenticated) {
-      // If authenticated, redirect to dashboard
       return <Redirect to="/dashboard" />;
     }
   }
@@ -65,13 +65,14 @@ class RegisterModal extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const { name, email, password } = this.state;
+    const { name, email, password, passwordCheck } = this.state;
 
     // Create user object
     const newUser = {
       name,
       email,
-      password
+      password,
+      passwordCheck
     };
 
     // Attempt to register
@@ -86,7 +87,7 @@ class RegisterModal extends Component {
           <span
             className="text-primary"
             onClick={this.toggle}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           >
             &nbsp; Register
           </span>
@@ -129,7 +130,16 @@ class RegisterModal extends Component {
                   className="mb-3"
                   onChange={this.onChange}
                 />
-                <Button color="dark" style={{ marginTop: '2rem' }} block>
+                <Label for="name">Re-Type Password</Label>
+                <Input
+                  type="password"
+                  name="passwordCheck"
+                  id="passwordCheck"
+                  placeholder="Re-Type Password"
+                  className="mb-3"
+                  onChange={this.onChange}
+                />
+                <Button color="dark" style={{ marginTop: "2rem" }} block>
                   Register
                 </Button>
               </FormGroup>

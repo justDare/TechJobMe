@@ -100,6 +100,7 @@ class ApplicationModal extends Component {
                   placeholder="Company Name"
                   className="mb-3"
                   onChange={this.onChange}
+                  required
                 />
                 <Input
                   type="text"
@@ -107,6 +108,7 @@ class ApplicationModal extends Component {
                   placeholder="Position"
                   className="mb-3"
                   onChange={this.onChange}
+                  required
                 />
                 <Input
                   type="text"

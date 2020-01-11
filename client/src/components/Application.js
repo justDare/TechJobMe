@@ -20,7 +20,7 @@ export class Application extends Component {
     let fields = [];
     for (var field in application) {
       fields.push(
-        <ListGroupItem>
+        <ListGroupItem key={field}>
           <ListGroupItemHeading>{field}</ListGroupItemHeading>
           <ListGroupItemText>{application[field]}</ListGroupItemText>
         </ListGroupItem>

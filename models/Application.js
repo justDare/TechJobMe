@@ -20,6 +20,11 @@ const ApplicationSchema = new Schema({
     type: String,
     required: true
   },
+  // sent: "yellow" , reject: "red", phone-screen: "purple" , onsite: "blue" , offer: "green"
+  stage: {
+    type: String,
+    required: true
+  },
   link: {
     type: String,
     required: false
@@ -27,6 +32,9 @@ const ApplicationSchema = new Schema({
   contact: {
     type: String,
     required: false
+  },
+  notes: {
+    type: String
   }
 });
 

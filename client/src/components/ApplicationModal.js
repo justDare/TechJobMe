@@ -21,11 +21,12 @@ class ApplicationModal extends Component {
     position: "",
     link: "",
     contact: "",
+    stage: "",
     msg: null
   };
 
   componentDidUpdate(prevProps) {
-    const { error, isAuthenticated } = this.props;
+    const { error } = this.props;
     if (error !== prevProps.error) {
       // Check for register error
       if (error.id === "ADD_APPLICATION_FAIL") {
@@ -35,10 +36,11 @@ class ApplicationModal extends Component {
       }
     }
 
-    // If authenticated, close modal
-    if (this.state.modal && isAuthenticated) {
-      // redirect to dashboard
-      // this.toggle();
+    const { application } = this.props;
+
+    // If application added, close modal
+    if (this.state.modal && application !== prevProps.application) {
+      this.toggle();
     }
   }
 
@@ -65,14 +67,12 @@ class ApplicationModal extends Component {
       user_id: this.props.auth.user._id,
       position: this.state.position,
       link: this.state.link,
-      contact: this.state.position
+      contact: this.state.contact,
+      stage: this.state.stage
     };
 
     // Add application via add application action
     this.props.addApplication(newApplication);
-
-    // close modal
-    // this.toggle();
   };
 
   render() {
@@ -102,6 +102,7 @@ class ApplicationModal extends Component {
                   onChange={this.onChange}
                   required
                 />
+                <Label for="position">Position</Label>
                 <Input
                   type="text"
                   name="position"
@@ -110,6 +111,7 @@ class ApplicationModal extends Component {
                   onChange={this.onChange}
                   required
                 />
+                <Label for="application">Posting Link</Label>
                 <Input
                   type="text"
                   name="link"
@@ -117,12 +119,29 @@ class ApplicationModal extends Component {
                   className="mb-3"
                   onChange={this.onChange}
                 />
+                <Label for="contact">Contact Email</Label>
                 <Input
                   type="text"
                   name="contact"
                   placeholder="Recruiter Contact Email"
+                  className="mb-3"
                   onChange={this.onChange}
                 />
+                <Label for="exampleSelect">Application Stage</Label>
+                <Input
+                  type="select"
+                  name="stage"
+                  id="exampleSelect"
+                  onChange={this.onChange}
+                  required
+                >
+                  <option value="">Select Application Stage</option>
+                  <option>Application Sent</option>
+                  <option>No Offer</option>
+                  <option>Phone Screen</option>
+                  <option>On-Site</option>
+                  <option>Offer</option>
+                </Input>
                 <Button color="dark" style={{ marginTop: "2rem" }} block>
                   Add Application
                 </Button>

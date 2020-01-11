@@ -19,9 +19,9 @@ router.get("/:id", auth, (req, res) => {
 // @access Private
 router.post("/", auth, (req, res) => {
   // Required fields
-  const { name, position } = req.body;
+  const { name, position, stage } = req.body;
 
-  if (!name || !position) {
+  if (!name || !position || !stage) {
     return res.status(400).json({ msg: "Please enter all fields." });
   }
 
@@ -30,7 +30,8 @@ router.post("/", auth, (req, res) => {
     user_id: req.body.user_id,
     position: req.body.position,
     link: req.body.link,
-    contact: req.body.contact
+    contact: req.body.contact,
+    stage: req.body.stage
   });
 
   newApplication.save().then(application => res.json(application));

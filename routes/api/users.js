@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const auth = require("../../middleware/auth");
 
 // JWT Config
 const jwtSecret = process.env.JWT || require("../../config/keys").jwt;
@@ -65,24 +66,33 @@ router.post("/", (req, res) => {
 });
 
 // @route GET api/users/edit
-// @desc  Edit A User
-// @access Public
-router.post("/edit", (req, res) => {
-  const { name, email, password, passwordCheck } = req.body;
+// @desc  Edit A User data field
+// @access Private
+router.post("/edit", auth, async (req, res) => {
+  const { name, email, password } = req.body;
 
   const data = {};
+
   // check for empty values
   if (name) data["name"] = name;
   if (email) data["email"] = email;
-  if (password) data["email"] = email;
-  console.log(data);
-
-  User.findOneAndUpdate({ email: email }, data, { new: true }).then(
-    (err, doc) => {
-      // Find user and update
+  if (password) {
+    bcrypt.hash(password, 10).then(function(hash) {
+      data["password"] = hash;
+      User.findOneAndUpdate(
+        { email: email },
+        data,
+        { new: true },
+        (err, doc) => {
+          res.json(doc);
+        }
+      );
+    });
+  } else {
+    User.findOneAndUpdate({ email: email }, data, { new: true }, (err, doc) => {
       res.json(doc);
-    }
-  );
+    });
+  }
 });
 
 module.exports = router;

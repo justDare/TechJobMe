@@ -21,7 +21,7 @@ router.post("/", (req, res) => {
     return res.status(400).json({ msg: "Please enter all fields." });
   }
 
-  if (!password !== passwordCheck) {
+  if (password !== passwordCheck) {
     return res.status(400).json({ msg: "Passwords do not match." });
   }
 
@@ -69,8 +69,7 @@ router.post("/", (req, res) => {
 // @desc  Edit A User data field
 // @access Private
 router.post("/edit", auth, async (req, res) => {
-  const { name, email, password } = req.body;
-
+  const { name, email, password, ref_email } = req.body;
   const data = {};
 
   // check for empty values
@@ -80,7 +79,7 @@ router.post("/edit", auth, async (req, res) => {
     bcrypt.hash(password, 10).then(function(hash) {
       data["password"] = hash;
       User.findOneAndUpdate(
-        { email: email },
+        { email: ref_email },
         data,
         { new: true },
         (err, doc) => {
@@ -89,9 +88,14 @@ router.post("/edit", auth, async (req, res) => {
       );
     });
   } else {
-    User.findOneAndUpdate({ email: email }, data, { new: true }, (err, doc) => {
-      res.json(doc);
-    });
+    User.findOneAndUpdate(
+      { email: ref_email },
+      data,
+      { new: true },
+      (err, doc) => {
+        res.json(doc);
+      }
+    );
   }
 });
 

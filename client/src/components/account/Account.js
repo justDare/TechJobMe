@@ -36,12 +36,21 @@ export class Account extends Component {
   render() {
     const user = this.props.user;
     const { modal, editField } = this.state;
-    console.log(editField);
+
+    let editFieldUI = "";
+    if (editField)
+      editFieldUI = editField.charAt(0).toUpperCase() + editField.substring(1);
+
     return (
       <div>
         <AppNavbar></AppNavbar>
         <Container>
-          <EditModal modal={modal} editField={editField} toggle={this.toggle} />
+          <EditModal
+            modal={modal}
+            editField={editField}
+            editFieldUI={editFieldUI}
+            toggle={this.toggle}
+          />
           <Link to="/dashboard">
             <Button className="mb-3" color="primary">
               Back

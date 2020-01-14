@@ -5,7 +5,8 @@ import {
   ADD_APPLICATION_FAIL,
   DELETE_APPLICATION,
   APPLICATIONS_LOADING,
-  CLEAR_APPLICATIONS
+  CLEAR_APPLICATIONS,
+  EDIT_APPLICATION
 } from "./types";
 import { tokenConfig } from "./authActions";
 import { returnErrors } from "./errorActions";
@@ -39,9 +40,12 @@ export const deleteApplication = id => (dispatch, getState) => {
     );
 };
 
-export const addApplication = application => (dispatch, getState) => {
+export const addApplication = applicationInfo => (dispatch, getState) => {
+  // Request body
+  const body = JSON.stringify(applicationInfo);
+
   axios
-    .post("/api/applications", application, tokenConfig(getState))
+    .post("/api/applications", body, tokenConfig(getState))
     .then(res =>
       dispatch({
         type: ADD_APPLICATION,
@@ -57,6 +61,20 @@ export const addApplication = application => (dispatch, getState) => {
         )
       );
       dispatch({ type: ADD_APPLICATION_FAIL });
+    });
+};
+
+export const editApplication = application => (dispatch, getState) => {
+  axios
+    .post("/api/applications/edit", application, tokenConfig(getState))
+    .then(res =>
+      dispatch({
+        type: EDIT_APPLICATION,
+        payload: res.data
+      })
+    )
+    .catch(err => {
+      dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
 

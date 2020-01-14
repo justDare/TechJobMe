@@ -28,18 +28,11 @@ export class EditModal extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    const { error, user } = this.props;
-    if (error !== prevProps.error) {
-      // Check for register error
-      if (error.id === "REGISTER_FAIL") {
-        this.setState({ msg: error.msg.msg });
-      } else {
-        this.setState({ msg: null });
-      }
-    }
+    const { error, stateToUpdate } = this.props;
+    if (error !== prevProps.error) this.setState({ msg: error.msg.msg });
 
     // If edit successful, close modal
-    if (this.props.modal && user !== prevProps.user) {
+    if (this.props.modal && stateToUpdate !== prevProps.stateToUpdate) {
       this.props.toggle();
     }
   }
@@ -51,8 +44,7 @@ export class EditModal extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const { editField } = this.props;
-    const { email } = this.props.user;
+    const { editField, stateToUpdate } = this.props;
     const { fieldInput, passwordCheck } = this.state;
 
     // Create user edit payload
@@ -65,15 +57,17 @@ export class EditModal extends Component {
       return;
     }
 
-    payload[editField] = fieldInput;
-    payload["ref_email"] = email;
+    payload["field"] = [editField, fieldInput];
+    payload["_id"] = stateToUpdate._id;
 
     // Attempt to edit
-    this.props.editUser(payload);
+    this.props.editAction(payload);
   };
 
   render() {
     const { modal, editField, editFieldUI } = this.props;
+    let current = "";
+    if (editField !== "password") current = this.props.current;
     let input = (
       <Fragment>
         <Label for="application">{editFieldUI}</Label>
@@ -83,6 +77,7 @@ export class EditModal extends Component {
           placeholder={editFieldUI}
           className="mb-3"
           onChange={this.onChange}
+          defaultValue={current}
           required
         />
       </Fragment>

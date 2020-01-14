@@ -5,7 +5,7 @@ const auth = require("../../middleware/auth");
 // Application Model
 const Application = require("../../models/Application");
 
-// @route GET api/applications
+// @route GET api/applications/id
 // @desc GET All applications
 // @access Private
 router.get("/:id", auth, (req, res) => {
@@ -37,7 +37,7 @@ router.post("/", auth, (req, res) => {
   newApplication.save().then(application => res.json(application));
 });
 
-// @route DELETE api/applications
+// @route DELETE api/applications/id
 // @desc Delete A Application
 // @access Private
 router.delete("/:id", auth, (req, res) => {
@@ -46,6 +46,28 @@ router.delete("/:id", auth, (req, res) => {
       application.remove().then(() => res.json({ success: true }))
     )
     .catch(err => res.status(404).json({ success: false }));
+});
+
+// @route POST api/applications/edit
+// @desc Edit A Application
+// @access Private
+router.post("/edit", auth, (req, res) => {
+  const { _id, field } = req.body;
+
+  // Get field name and value from request
+  const data = { [field[0]]: field[1] };
+
+  // Find by _id and update single value, return update
+  Application.findOneAndUpdate(
+    { _id: _id },
+    data,
+    {
+      new: true
+    },
+    (err, doc) => {
+      res.json(doc);
+    }
+  );
 });
 
 module.exports = router;

@@ -10,32 +10,52 @@ import {
   ListGroup,
   ListGroupItem,
   ListGroupItemHeading,
-  ListGroupItemText
+  ListGroupItemText,
+  Alert
 } from "reactstrap";
 import EditModal from "../EditModal";
+import { editUser } from "../../actions/authActions";
 
 export class Account extends Component {
   state = {
     modal: false,
-    editField: ""
+    editField: "",
+    current: "",
+    msg: ""
   };
 
   static propTypes = {
-    user: PropTypes.object
+    user: PropTypes.object,
+    editUser: PropTypes.func.isRequired
   };
 
-  handleEdit = () => {};
+  componentDidUpdate(prevProps) {
+    const user = this.props.user;
 
-  toggle = editField => {
+    // Alert when edit successful
+    if (user !== prevProps.user) {
+      for (var field in user) {
+        if (user[field] !== prevProps.user[field]) {
+          const fieldUI = field.charAt(0).toUpperCase() + field.substring(1);
+          this.setState({
+            msg: `${fieldUI} updated successfully!`
+          });
+        }
+      }
+    }
+  }
+
+  toggle = (editField, current) => {
     this.setState({
       modal: !this.state.modal,
-      editField: editField
+      editField: editField,
+      current: current
     });
   };
 
   render() {
     const user = this.props.user;
-    const { modal, editField } = this.state;
+    const { modal, editField, current } = this.state;
 
     let editFieldUI = "";
     if (editField)
@@ -49,7 +69,10 @@ export class Account extends Component {
             modal={modal}
             editField={editField}
             editFieldUI={editFieldUI}
+            current={current}
             toggle={this.toggle}
+            editAction={this.props.editUser}
+            stateToUpdate={user}
           />
           <Link to="/dashboard">
             <Button className="mb-3" color="primary">
@@ -58,15 +81,18 @@ export class Account extends Component {
           </Link>
           <h1 className="mb-3">Account Settings</h1>
           <ListGroup>
+            {this.state.msg ? (
+              <Alert color="success">{this.state.msg}</Alert>
+            ) : null}
             <ListGroupItem key={`${user._id}name`}>
               <ListGroupItemHeading>Name</ListGroupItemHeading>
               <ListGroupItemText>{user.name}</ListGroupItemText>
-              <MdEdit onClick={() => this.toggle("name")} />
+              <MdEdit onClick={() => this.toggle("name", user.name)} />
             </ListGroupItem>
             <ListGroupItem key={`${user._id}email`}>
               <ListGroupItemHeading>Email</ListGroupItemHeading>
               <ListGroupItemText>{user.email}</ListGroupItemText>
-              <MdEdit onClick={() => this.toggle("email")} />
+              <MdEdit onClick={() => this.toggle("email", user.email)} />
             </ListGroupItem>
             <ListGroupItem key={`${user._id}password`}>
               <ListGroupItemHeading>Change Password</ListGroupItemHeading>
@@ -83,4 +109,4 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps)(Account);
+export default connect(mapStateToProps, { editUser })(Account);

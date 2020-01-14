@@ -69,29 +69,27 @@ router.post("/", (req, res) => {
 // @desc  Edit A User data field
 // @access Private
 router.post("/edit", auth, async (req, res) => {
-  const { name, email, password, ref_email } = req.body;
-  const data = {};
+  const { _id, field } = req.body;
 
-  // check for empty values
-  if (name) data["name"] = name;
-  if (email) data["email"] = email;
-  if (password) {
-    bcrypt.hash(password, 10).then(function(hash) {
+  // Get field name and value from request
+  const data = { [field[0]]: field[1] };
+
+  // If password edit, re-hash before sending to DB
+  if (field[0] === "password") {
+    bcrypt.hash(field[1], 10).then(function(hash) {
       data["password"] = hash;
-      User.findOneAndUpdate(
-        { email: ref_email },
-        data,
-        { new: true },
-        (err, doc) => {
-          res.json(doc);
-        }
-      );
+      User.findOneAndUpdate({ _id: _id }, data, { new: true }, (err, doc) => {
+        res.json(doc);
+      });
     });
   } else {
     User.findOneAndUpdate(
-      { email: ref_email },
+      { _id: _id },
       data,
-      { new: true },
+      {
+        new: true,
+        projection: { _id: true, name: true, email: true, register_date: true }
+      },
       (err, doc) => {
         res.json(doc);
       }

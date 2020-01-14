@@ -4,7 +4,8 @@ import {
   ADD_APPLICATION,
   ADD_APPLICATION_FAIL,
   DELETE_APPLICATION,
-  APPLICATIONS_LOADING
+  APPLICATIONS_LOADING,
+  EDIT_APPLICATION
 } from "../actions/types";
 
 const initialState = {
@@ -46,6 +47,17 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
+      };
+    case EDIT_APPLICATION:
+      return {
+        ...state,
+        applications: state.applications.map(application =>
+          application._id === action.payload._id
+            ? // updated application
+              action.payload
+            : // otherwise return original
+              application
+        )
       };
 
     default:

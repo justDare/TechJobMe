@@ -8,6 +8,7 @@ import {
   deleteApplication
 } from "../actions/applicationActions";
 import PropTypes from "prop-types";
+import { formatDateString } from "../utilities/helperFunctions";
 
 class JobApplications extends Component {
   componentDidMount() {
@@ -23,6 +24,15 @@ class JobApplications extends Component {
   render() {
     const { applications } = this.props.application;
 
+    // sent: "yellow" , reject: "red", phone-screen: "purple" , onsite: "blue" , offer: "green"
+    const statusColors = {
+      "Application Sent": "yellow",
+      "No Offer": "red",
+      "Phone Screen": "purple",
+      "On-Site": "blue",
+      Offer: "green"
+    };
+
     return (
       <ListGroup>
         <TransitionGroup className="job-applications">
@@ -37,17 +47,28 @@ class JobApplications extends Component {
                   pathname: `/application/${application._id}`
                 }}
               >
-                <ListGroupItem>
-                  <Button
-                    className="remove-btn"
-                    color="danger"
-                    size="small"
-                    onClick={this.onDeleteClick.bind(this, application._id)}
-                  >
-                    &times;
-                  </Button>
-                  {application.name}
-                </ListGroupItem>
+                <ListGroup horizontal>
+                  <ListGroupItem>
+                    <Button
+                      className="remove-btn"
+                      color="danger"
+                      size="small"
+                      onClick={this.onDeleteClick.bind(this, application._id)}
+                    >
+                      &times;
+                    </Button>
+                  </ListGroupItem>
+                  <ListGroupItem>{application.name}</ListGroupItem>
+                  <ListGroupItem>{application.position}</ListGroupItem>
+                  <ListGroupItem>
+                    {formatDateString(application.date)}
+                  </ListGroupItem>
+                  <ListGroupItem>
+                    <span
+                      className={`status-${statusColors[application.stage]}`}
+                    ></span>
+                  </ListGroupItem>
+                </ListGroup>
               </Link>
             </CSSTransition>
           ))}

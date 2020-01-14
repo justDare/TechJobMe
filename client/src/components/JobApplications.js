@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ListGroup, ListGroupItem, Button } from "reactstrap";
+import { Row, Col, Button } from "reactstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -9,6 +9,7 @@ import {
 } from "../actions/applicationActions";
 import PropTypes from "prop-types";
 import { formatDateString } from "../utilities/helperFunctions";
+import "./JobApplications.scss";
 
 class JobApplications extends Component {
   componentDidMount() {
@@ -34,46 +35,37 @@ class JobApplications extends Component {
     };
 
     return (
-      <ListGroup>
-        <TransitionGroup className="job-applications">
-          {applications.map(application => (
-            <CSSTransition
-              key={application._id}
-              timeout={500}
-              classNames="fade"
+      <TransitionGroup className="job-applications">
+        {applications.map(application => (
+          <CSSTransition key={application._id} timeout={500} classNames="fade">
+            <Row
+              className="application-row position-relative"
+              tag={Link}
+              to={{
+                pathname: `/application/${application._id}`
+              }}
             >
-              <Link
-                to={{
-                  pathname: `/application/${application._id}`
-                }}
-              >
-                <ListGroup horizontal>
-                  <ListGroupItem>
-                    <Button
-                      className="remove-btn"
-                      color="danger"
-                      size="small"
-                      onClick={this.onDeleteClick.bind(this, application._id)}
-                    >
-                      &times;
-                    </Button>
-                  </ListGroupItem>
-                  <ListGroupItem>{application.name}</ListGroupItem>
-                  <ListGroupItem>{application.position}</ListGroupItem>
-                  <ListGroupItem>
-                    {formatDateString(application.date)}
-                  </ListGroupItem>
-                  <ListGroupItem>
-                    <span
-                      className={`status-${statusColors[application.stage]}`}
-                    ></span>
-                  </ListGroupItem>
-                </ListGroup>
-              </Link>
-            </CSSTransition>
-          ))}
-        </TransitionGroup>
-      </ListGroup>
+              <Col xs="2">
+                <Button
+                  className="remove-btn"
+                  color="danger"
+                  size="small"
+                  onClick={this.onDeleteClick.bind(this, application._id)}
+                >
+                  &times;
+                </Button>
+              </Col>
+              <Col xs="3">{application.name}</Col>
+              <Col xs="3">{application.position}</Col>
+              <Col xs="3">{formatDateString(application.date)}</Col>
+              <Col xs="1"></Col>
+              <span
+                className={`status status-${statusColors[application.stage]}`}
+              ></span>
+            </Row>
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
     );
   }
 }

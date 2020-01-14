@@ -11,7 +11,7 @@ import { loadUser } from "./actions/authActions";
 import PrivateRoute from "./components/auth/PrivateRoute";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import "./App.scss";
 
 class App extends Component {
   componentDidMount() {

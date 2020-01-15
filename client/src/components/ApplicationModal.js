@@ -131,7 +131,6 @@ class ApplicationModal extends Component {
                 <Input
                   type="select"
                   name="stage"
-                  id="exampleSelect"
                   onChange={this.onChange}
                   required
                 >

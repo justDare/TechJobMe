@@ -38,7 +38,7 @@ export class EditModal extends Component {
   }
 
   onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ fieldInput: e.target.value });
   };
 
   onSubmit = e => {
@@ -64,24 +64,41 @@ export class EditModal extends Component {
     this.props.editAction(payload);
   };
 
+  // Input may be single input or select
+  getInputJSX = (pEditFieldUI, pCurrent, type = "input") => {
+    if (this.props.editField !== "stage") {
+      return (
+        <Fragment>
+          <Label for="application">{pEditFieldUI}</Label>
+          <Input
+            type="text"
+            placeholder={pEditFieldUI}
+            className="mb-3"
+            onChange={this.onChange}
+            defaultValue={pCurrent}
+            required
+          />
+        </Fragment>
+      );
+    } else {
+      return (
+        <Input type="select" onChange={this.onChange} required>
+          <option value="">Select Application Stage</option>
+          <option>Application Sent</option>
+          <option>No Offer</option>
+          <option>Phone Screen</option>
+          <option>On-Site</option>
+          <option>Offer</option>
+        </Input>
+      );
+    }
+  };
+
   render() {
     const { modal, editField, editFieldUI } = this.props;
     let current = "";
     if (editField !== "password") current = this.props.current;
-    let input = (
-      <Fragment>
-        <Label for="application">{editFieldUI}</Label>
-        <Input
-          type="text"
-          name="fieldInput"
-          placeholder={editFieldUI}
-          className="mb-3"
-          onChange={this.onChange}
-          defaultValue={current}
-          required
-        />
-      </Fragment>
-    );
+    let input = this.getInputJSX(editFieldUI, current);
 
     // Validation for password changes
     let validateInput = "";

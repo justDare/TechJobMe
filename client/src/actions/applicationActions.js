@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 import {
   GET_APPLICATIONS,
   ADD_APPLICATION,
@@ -6,10 +6,11 @@ import {
   DELETE_APPLICATION,
   APPLICATIONS_LOADING,
   CLEAR_APPLICATIONS,
-  EDIT_APPLICATION
-} from "./types";
-import { tokenConfig } from "./authActions";
-import { returnErrors } from "./errorActions";
+  EDIT_APPLICATION,
+  DELETE_ALL
+} from './types';
+import { tokenConfig } from './authActions';
+import { returnErrors } from './errorActions';
 
 export const getApplications = id => (dispatch, getState) => {
   dispatch(setApplicationsLoading());
@@ -28,7 +29,7 @@ export const getApplications = id => (dispatch, getState) => {
 
 export const deleteApplication = id => (dispatch, getState) => {
   axios
-    .delete(`/api/applications/${id}`, tokenConfig(getState))
+    .delete(`/api/applications/delete-application/${id}`, tokenConfig(getState))
     .then(res =>
       dispatch({
         type: DELETE_APPLICATION,
@@ -40,12 +41,23 @@ export const deleteApplication = id => (dispatch, getState) => {
     );
 };
 
+export const deleteAllApplications = user_id => (dispatch, getState) => {
+  axios
+    .delete(`/api/applications/delete-all/${user_id}`, tokenConfig(getState))
+    .then(res => {
+      dispatch({
+        type: DELETE_ALL
+      });
+    })
+    .catch(err => dispatch(returnErrors(err.msg, err.msg)));
+};
+
 export const addApplication = applicationInfo => (dispatch, getState) => {
   // Request body
   const body = JSON.stringify(applicationInfo);
 
   axios
-    .post("/api/applications", body, tokenConfig(getState))
+    .post('/api/applications', body, tokenConfig(getState))
     .then(res =>
       dispatch({
         type: ADD_APPLICATION,
@@ -57,7 +69,7 @@ export const addApplication = applicationInfo => (dispatch, getState) => {
         returnErrors(
           err.response.data,
           err.response.status,
-          "ADD_APPLICATION_FAIL"
+          'ADD_APPLICATION_FAIL'
         )
       );
       dispatch({ type: ADD_APPLICATION_FAIL });
@@ -66,7 +78,7 @@ export const addApplication = applicationInfo => (dispatch, getState) => {
 
 export const editApplication = application => (dispatch, getState) => {
   axios
-    .post("/api/applications/edit", application, tokenConfig(getState))
+    .post('/api/applications/edit', application, tokenConfig(getState))
     .then(res =>
       dispatch({
         type: EDIT_APPLICATION,

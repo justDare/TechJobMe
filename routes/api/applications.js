@@ -1,14 +1,14 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const auth = require("../../middleware/auth");
+const auth = require('../../middleware/auth');
 
 // Application Model
-const Application = require("../../models/Application");
+const Application = require('../../models/Application');
 
 // @route GET api/applications/id
 // @desc GET All applications
 // @access Private
-router.get("/:id", auth, (req, res) => {
+router.get('/:id', auth, (req, res) => {
   Application.find({ user_id: req.params.id })
     .sort({ date: -1 })
     .then(applications => res.json(applications));
@@ -17,12 +17,12 @@ router.get("/:id", auth, (req, res) => {
 // @route POST api/applications
 // @desc Create A Application
 // @access Private
-router.post("/", auth, (req, res) => {
+router.post('/', auth, (req, res) => {
   // Required fields
   const { name, position, stage } = req.body;
 
   if (!name || !position || !stage) {
-    return res.status(400).json({ msg: "Please enter all fields." });
+    return res.status(400).json({ msg: 'Please enter all fields.' });
   }
 
   const newApplication = new Application({
@@ -41,7 +41,7 @@ router.post("/", auth, (req, res) => {
 // @route DELETE api/applications/id
 // @desc Delete A Application
 // @access Private
-router.delete("/:id", auth, (req, res) => {
+router.delete('/delete-application/:id', auth, (req, res) => {
   Application.findById(req.params.id)
     .then(application =>
       application.remove().then(() => res.json({ success: true }))
@@ -52,7 +52,7 @@ router.delete("/:id", auth, (req, res) => {
 // @route POST api/applications/edit
 // @desc Edit A Application
 // @access Private
-router.post("/edit", auth, (req, res) => {
+router.post('/edit', auth, (req, res) => {
   const { _id, field } = req.body;
 
   // Get field name and value from request
@@ -69,6 +69,16 @@ router.post("/edit", auth, (req, res) => {
       res.json(doc);
     }
   );
+});
+
+// @route DELETE api/applications/delete-all
+// @desc Delete All Applications
+// @access Private
+router.delete('/delete-all/:id', auth, (req, res) => {
+  console.log(req.body);
+  Application.deleteMany({ user_id: req.params.id })
+    .then(result => res.json(result.deletedCount))
+    .catch(err => res.json(err));
 });
 
 module.exports = router;

@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from "react";
-import { editUser } from "../actions/authActions";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import React, { Component, Fragment } from 'react';
+import { editUser } from '../actions/authActions';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   Button,
   Modal,
@@ -12,15 +12,15 @@ import {
   Label,
   Input,
   Alert
-} from "reactstrap";
-import "./modal.scss";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+} from 'reactstrap';
+import './modal.scss';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export class EditModal extends Component {
   state = {
-    fieldInput: "",
-    passwordCheck: "",
+    fieldInput: '',
+    passwordCheck: '',
     msg: null,
     date: new Date()
   };
@@ -60,23 +60,23 @@ export class EditModal extends Component {
     // Create user edit payload
     const payload = {};
 
-    if (editField === "password" && fieldInput !== passwordCheck) {
+    if (editField === 'password' && fieldInput !== passwordCheck) {
       this.setState({
-        msg: "Passwords do not match."
+        msg: 'Passwords do not match.'
       });
       return;
     }
 
-    payload["field"] = [editField, fieldInput];
-    payload["_id"] = stateToUpdate._id;
+    payload['field'] = [editField, fieldInput];
+    payload['_id'] = stateToUpdate._id;
 
     // Attempt to edit
     this.props.editAction(payload);
   };
 
   // Input may be single input or select
-  getInputJSX = (pEditFieldUI, pCurrent, type = "input") => {
-    if (this.props.editField === "stage") {
+  getInputJSX = (pEditFieldUI, pCurrent, type = 'input') => {
+    if (this.props.editField === 'stage') {
       return (
         <Input type="select" onChange={this.onChange} required>
           <option value="">Select Application Stage</option>
@@ -87,7 +87,7 @@ export class EditModal extends Component {
           <option>Offer</option>
         </Input>
       );
-    } else if (this.props.editField === "date") {
+    } else if (this.props.editField === 'date') {
       return (
         <DatePicker
           selected={Date.parse(this.props.stateToUpdate.date)}
@@ -119,15 +119,14 @@ export class EditModal extends Component {
   };
 
   render() {
-    console.log(typeof this.state.fieldInput);
     const { modal, editField, editFieldUI } = this.props;
-    let current = "";
-    if (editField !== "password") current = this.props.current;
+    let current = '';
+    if (editField !== 'password') current = this.props.current;
     let input = this.getInputJSX(editFieldUI, current);
 
     // Validation for password changes
-    let validateInput = "";
-    if (editField === "password") {
+    let validateInput = '';
+    if (editField === 'password') {
       validateInput = (
         <Fragment>
           <Label for="name">Re-Type Password</Label>
@@ -156,7 +155,7 @@ export class EditModal extends Component {
             <FormGroup>
               {input}
               {validateInput}
-              <Button color="dark" style={{ marginTop: "2rem" }} block>
+              <Button color="dark" style={{ marginTop: '2rem' }} block>
                 Submit Changes
               </Button>
             </FormGroup>

@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import AppNavbar from "../AppNavbar";
-import { Link } from "react-router-dom";
-import { MdEdit } from "react-icons/md";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import AppNavbar from '../AppNavbar';
+import { Link } from 'react-router-dom';
+import { MdEdit } from 'react-icons/md';
 import {
   Container,
   Button,
@@ -12,21 +12,22 @@ import {
   ListGroupItemHeading,
   ListGroupItemText,
   Alert
-} from "reactstrap";
-import EditModal from "../EditModal";
-import { editUser } from "../../actions/authActions";
+} from 'reactstrap';
+import EditModal from '../EditModal';
+import { editUser, deleteUser } from '../../actions/authActions';
 
 export class Account extends Component {
   state = {
     modal: false,
-    editField: "",
-    current: "",
-    msg: ""
+    editField: '',
+    current: '',
+    msg: ''
   };
 
   static propTypes = {
     user: PropTypes.object,
-    editUser: PropTypes.func.isRequired
+    editUser: PropTypes.func.isRequired,
+    deleteUser: PropTypes.func.isRequired
   };
 
   componentDidUpdate(prevProps) {
@@ -53,11 +54,15 @@ export class Account extends Component {
     });
   };
 
+  deleteAccount = () => {
+    this.props.deleteUser(this.props.user._id);
+  };
+
   render() {
     const user = this.props.user;
     const { modal, editField, current } = this.state;
 
-    let editFieldUI = "";
+    let editFieldUI = '';
     if (editField)
       editFieldUI = editField.charAt(0).toUpperCase() + editField.substring(1);
 
@@ -87,16 +92,25 @@ export class Account extends Component {
             <ListGroupItem key={`${user._id}name`}>
               <ListGroupItemHeading>Name</ListGroupItemHeading>
               <ListGroupItemText>{user.name}</ListGroupItemText>
-              <MdEdit onClick={() => this.toggle("name", user.name)} />
+              <MdEdit onClick={() => this.toggle('name', user.name)} />
             </ListGroupItem>
             <ListGroupItem key={`${user._id}email`}>
               <ListGroupItemHeading>Email</ListGroupItemHeading>
               <ListGroupItemText>{user.email}</ListGroupItemText>
-              <MdEdit onClick={() => this.toggle("email", user.email)} />
+              <MdEdit onClick={() => this.toggle('email', user.email)} />
             </ListGroupItem>
             <ListGroupItem key={`${user._id}password`}>
               <ListGroupItemHeading>Change Password</ListGroupItemHeading>
-              <MdEdit onClick={() => this.toggle("password")} />
+              <MdEdit onClick={() => this.toggle('password')} />
+            </ListGroupItem>
+          </ListGroup>
+          <h2 className="mb-3 mt-5">Danger Zone</h2>
+          <ListGroup>
+            <ListGroupItem>
+              <ListGroupItemHeading>Delete My Account</ListGroupItemHeading>
+              <Button color="danger" onClick={() => this.deleteAccount()}>
+                Delete Account
+              </Button>
             </ListGroupItem>
           </ListGroup>
         </Container>
@@ -109,4 +123,4 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps, { editUser })(Account);
+export default connect(mapStateToProps, { editUser, deleteUser })(Account);

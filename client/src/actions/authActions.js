@@ -1,5 +1,5 @@
-import axios from "axios";
-import { returnErrors } from "./errorActions";
+import axios from 'axios';
+import { returnErrors } from './errorActions';
 import {
   USER_LOADED,
   USER_LOADING,
@@ -10,8 +10,10 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_EDIT_SUCCESS,
-  USER_EDIT_FAIL
-} from "./types";
+  USER_EDIT_FAIL,
+  USER_DELETE
+} from './types';
+import { deleteAllApplications } from '../actions/applicationActions';
 
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
@@ -19,7 +21,7 @@ export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
 
   axios
-    .get("/api/auth/user", tokenConfig(getState))
+    .get('/api/auth/user', tokenConfig(getState))
     .then(res =>
       dispatch({
         type: USER_LOADED,
@@ -42,7 +44,7 @@ export const register = ({
   // Headers
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     }
   };
 
@@ -50,7 +52,7 @@ export const register = ({
   const body = JSON.stringify({ name, email, password, passwordCheck });
 
   axios
-    .post("/api/users", body, config)
+    .post('/api/users', body, config)
     .then(res =>
       dispatch({
         type: REGISTER_SUCCESS,
@@ -59,7 +61,7 @@ export const register = ({
     )
     .catch(err => {
       dispatch(
-        returnErrors(err.response.data, err.response.status, "REGISTER_FAIL")
+        returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL')
       );
       dispatch({
         type: REGISTER_FAIL
@@ -72,7 +74,7 @@ export const login = ({ email, password }) => dispatch => {
   // Headers
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     }
   };
 
@@ -80,7 +82,7 @@ export const login = ({ email, password }) => dispatch => {
   const body = JSON.stringify({ email, password });
 
   axios
-    .post("/api/auth", body, config)
+    .post('/api/auth', body, config)
     .then(res =>
       dispatch({
         type: LOGIN_SUCCESS,
@@ -89,7 +91,7 @@ export const login = ({ email, password }) => dispatch => {
     )
     .catch(err => {
       dispatch(
-        returnErrors(err.response.data, err.response.status, "LOGIN_FAIL")
+        returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
       );
       dispatch({
         type: LOGIN_FAIL
@@ -109,7 +111,7 @@ export const editUser = fields => (dispatch, getState) => {
   const body = JSON.stringify(fields);
 
   axios
-    .post("api/users/edit", body, tokenConfig(getState))
+    .post('api/users/edit', body, tokenConfig(getState))
     .then(res =>
       dispatch({
         type: USER_EDIT_SUCCESS,
@@ -118,11 +120,27 @@ export const editUser = fields => (dispatch, getState) => {
     )
     .catch(err => {
       dispatch(
-        returnErrors(err.response.data, err.response.status, "USER_EDIT_FAIL")
+        returnErrors(err.response.data, err.response.status, 'USER_EDIT_FAIL')
       );
       dispatch({
         type: USER_EDIT_FAIL
       });
+    });
+};
+
+export const deleteUser = _id => (dispatch, getState) => {
+  axios
+    .delete(`api/users/delete/${_id}`, tokenConfig(getState))
+    .then(res => {
+      dispatch({
+        type: USER_DELETE
+      });
+      deleteAllApplications(_id);
+    })
+    .catch(err => {
+      dispatch(
+        returnErrors(err.response.data, err.response.status, 'USER_EDIT_FAIL')
+      );
     });
 };
 
@@ -134,13 +152,13 @@ export const tokenConfig = getState => {
   // Headers
   const config = {
     headers: {
-      "Content-type": "application/json"
+      'Content-type': 'application/json'
     }
   };
 
   // If token, add to headers
   if (token) {
-    config.headers["x-auth-token"] = token;
+    config.headers['x-auth-token'] = token;
   }
 
   return config;

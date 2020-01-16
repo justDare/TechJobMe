@@ -4,9 +4,10 @@ import {
   ADD_APPLICATION,
   ADD_APPLICATION_FAIL,
   DELETE_APPLICATION,
+  DELETE_ALL,
   APPLICATIONS_LOADING,
   EDIT_APPLICATION
-} from "../actions/types";
+} from '../actions/types';
 
 const initialState = {
   applications: [],
@@ -37,6 +38,11 @@ export default function(state = initialState, action) {
         applications: state.applications.filter(
           application => application._id !== action.payload
         )
+      };
+    case DELETE_ALL:
+      return {
+        ...state,
+        applications: []
       };
     case ADD_APPLICATION:
       return {

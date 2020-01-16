@@ -13,6 +13,8 @@ import {
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { addApplication } from "../actions/applicationActions";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class ApplicationModal extends Component {
   state = {
@@ -22,6 +24,7 @@ class ApplicationModal extends Component {
     link: "",
     contact: "",
     stage: "",
+    date: new Date(),
     msg: null
   };
 
@@ -59,6 +62,12 @@ class ApplicationModal extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  setDate = pDate => {
+    this.setState({
+      date: pDate
+    });
+  };
+
   onSubmit = e => {
     e.preventDefault();
 
@@ -68,7 +77,8 @@ class ApplicationModal extends Component {
       position: this.state.position,
       link: this.state.link,
       contact: this.state.contact,
-      stage: this.state.stage
+      stage: this.state.stage,
+      date: this.state.date
     };
 
     // Add application via add application action
@@ -127,10 +137,11 @@ class ApplicationModal extends Component {
                   className="mb-3"
                   onChange={this.onChange}
                 />
-                <Label for="exampleSelect">Application Stage</Label>
+                <Label for="selectStage">Application Stage</Label>
                 <Input
                   type="select"
                   name="stage"
+                  className="mb-3"
                   onChange={this.onChange}
                   required
                 >
@@ -141,6 +152,20 @@ class ApplicationModal extends Component {
                   <option>On-Site</option>
                   <option>Offer</option>
                 </Input>
+                <Label for="date" className="d-block">
+                  Select Date
+                </Label>
+                <DatePicker
+                  selected={this.state.date}
+                  onChange={date => this.setDate(date)}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  timeCaption="time"
+                  dateFormat="MMMM d, yyyy h:mm aa"
+                  todayButton="Today"
+                  shouldCloseOnSelect={true}
+                />
                 <Button color="dark" style={{ marginTop: "2rem" }} block>
                   Add Application
                 </Button>

@@ -31,7 +31,8 @@ router.post("/", auth, (req, res) => {
     position: req.body.position,
     link: req.body.link,
     contact: req.body.contact,
-    stage: req.body.stage
+    stage: req.body.stage,
+    date: req.body.date
   });
 
   newApplication.save().then(application => res.json(application));

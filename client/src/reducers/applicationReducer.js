@@ -11,7 +11,8 @@ import {
 
 const initialState = {
   applications: [],
-  loading: false
+  loading: false,
+  msg: null
 };
 
 export default function(state = initialState, action) {
@@ -42,12 +43,14 @@ export default function(state = initialState, action) {
     case DELETE_ALL:
       return {
         ...state,
-        applications: []
+        applications: [],
+        msg: 'All applications deleted successfully!'
       };
     case ADD_APPLICATION:
       return {
         ...state,
-        applications: [action.payload, ...state.applications]
+        applications: [action.payload, ...state.applications],
+        msg: 'Application added successfully!'
       };
     case APPLICATIONS_LOADING:
       return {

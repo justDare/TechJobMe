@@ -15,10 +15,12 @@ import {
 } from 'reactstrap';
 import EditModal from '../EditModal';
 import { editUser, deleteUser } from '../../actions/authActions';
+import PromptModal from '../PromptModal';
 
 export class Account extends Component {
   state = {
     modal: false,
+    promptModal: false,
     editField: '',
     current: '',
     msg: ''
@@ -54,13 +56,19 @@ export class Account extends Component {
     });
   };
 
+  togglePrompt = () => {
+    this.setState({
+      promptModal: !this.state.promptModal
+    });
+  };
+
   deleteAccount = () => {
     this.props.deleteUser(this.props.user._id);
   };
 
   render() {
     const user = this.props.user;
-    const { modal, editField, current } = this.state;
+    const { modal, promptModal, editField, current } = this.state;
 
     let editFieldUI = '';
     if (editField)
@@ -105,14 +113,23 @@ export class Account extends Component {
             </ListGroupItem>
           </ListGroup>
           <h2 className="mb-3 mt-5">Danger Zone</h2>
-          <ListGroup>
+          <ListGroup className="danger-zone">
             <ListGroupItem>
               <ListGroupItemHeading>Delete My Account</ListGroupItemHeading>
-              <Button color="danger" onClick={() => this.deleteAccount()}>
+              <Button color="danger" onClick={() => this.togglePrompt()}>
                 Delete Account
               </Button>
             </ListGroupItem>
           </ListGroup>
+          <PromptModal
+            modalAction={this.deleteAccount}
+            toggle={(this, this.togglePrompt)}
+            modal={promptModal}
+            title="Delete User Account"
+            body="Are you sure you wish to delete your account? All of your data will be gone forever."
+            cancel="Cancel"
+            confirm="Delete my account"
+          />
         </Container>
       </div>
     );

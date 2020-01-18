@@ -9,14 +9,17 @@ import {
   REGISTER_FAIL,
   USER_EDIT_SUCCESS,
   USER_EDIT_FAIL,
-  USER_DELETE
+  USER_DELETE,
+  PASSWORD_RESET_SENT,
+  CLEAR_AUTH_MSG
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   isLoading: false,
-  user: null
+  user: null,
+  msg: null
 };
 
 export default function(state = initialState, action) {
@@ -69,6 +72,16 @@ export default function(state = initialState, action) {
         ...state,
         isAuthenticated: false,
         user: null
+      };
+    case PASSWORD_RESET_SENT:
+      return {
+        ...state,
+        msg: action.payload
+      };
+    case CLEAR_AUTH_MSG:
+      return {
+        ...state,
+        msg: null
       };
     default:
       return state;

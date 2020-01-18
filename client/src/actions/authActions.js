@@ -11,7 +11,9 @@ import {
   REGISTER_FAIL,
   USER_EDIT_SUCCESS,
   USER_EDIT_FAIL,
-  USER_DELETE
+  USER_DELETE,
+  PASSWORD_RESET_SENT,
+  CLEAR_AUTH_MSG
 } from './types';
 import { deleteAllApplications } from '../actions/applicationActions';
 
@@ -112,10 +114,10 @@ export const editUser = fields => (dispatch, getState) => {
 
   axios
     .post('api/users/edit', body, tokenConfig(getState))
-    .then(res =>
+    .then(response =>
       dispatch({
         type: USER_EDIT_SUCCESS,
-        payload: res.data
+        payload: response.data
       })
     )
     .catch(err => {
@@ -131,7 +133,7 @@ export const editUser = fields => (dispatch, getState) => {
 export const deleteUser = _id => (dispatch, getState) => {
   axios
     .delete(`api/users/delete/${_id}`, tokenConfig(getState))
-    .then(res => {
+    .then(() => {
       dispatch({
         type: USER_DELETE
       });
@@ -140,6 +142,24 @@ export const deleteUser = _id => (dispatch, getState) => {
     .catch(err => {
       dispatch(
         returnErrors(err.response.data, err.response.status, 'USER_EDIT_FAIL')
+      );
+    });
+};
+
+export const forgotPasswordEmail = email => (dispatch, getState) => {
+  // Request body
+  const body = JSON.stringify(email);
+
+  console.log(body);
+
+  axios
+    .post('api/auth/forgotPassword', body, tokenConfig(getState))
+    .then(response => {
+      dispatch({ type: PASSWORD_RESET_SENT, payload: response.data });
+    })
+    .catch(err => {
+      dispatch(
+        returnErrors(err.response.data, err.response.status, 'EMAIL_NOT_IN_DB')
       );
     });
 };
@@ -162,4 +182,11 @@ export const tokenConfig = getState => {
   }
 
   return config;
+};
+
+// CLEAR ERRORS
+export const clearAuthMessage = () => {
+  return {
+    type: CLEAR_AUTH_MSG
+  };
 };

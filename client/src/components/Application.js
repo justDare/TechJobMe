@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import AppNavbar from "../components/AppNavbar";
+import React, { Component } from 'react';
+import AppNavbar from '../components/AppNavbar';
 import {
   Container,
   Button,
@@ -8,24 +8,30 @@ import {
   ListGroupItemHeading,
   ListGroupItemText,
   Alert
-} from "reactstrap";
+} from 'reactstrap';
 
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import _ from "lodash";
-import { Link } from "react-router-dom";
-import { MdEdit } from "react-icons/md";
-import EditModal from "../components/EditModal";
-import { editApplication } from "../actions/applicationActions";
-import { formatDateString } from "../utilities/helperFunctions";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
+import { Link } from 'react-router-dom';
+import { MdEdit } from 'react-icons/md';
+import EditModal from '../components/EditModal';
+import { editApplication } from '../actions/applicationActions';
+import { formatDateString } from '../utilities/helperFunctions';
+import store from '../store';
+import { loadUser } from '../actions/authActions';
 
 export class Application extends Component {
   state = {
     modal: false,
-    editField: "",
-    current: "",
-    msg: ""
+    editField: '',
+    current: '',
+    msg: ''
   };
+
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
 
   componentDidUpdate(prevProps) {
     const application = this.props.application;
@@ -66,11 +72,11 @@ export class Application extends Component {
       console.log(field);
       if (!nonUIFields[field]) {
         let fieldHeadingUI = field.charAt(0).toUpperCase() + field.substring(1);
-        if (field === "name") fieldHeadingUI = `Company Name`;
+        if (field === 'name') fieldHeadingUI = `Company Name`;
         let fieldInfoUI;
-        if (field === "date")
+        if (field === 'date')
           fieldInfoUI = formatDateString(application[field]);
-        else if (application[field] === "") fieldInfoUI = "N/A";
+        else if (application[field] === '') fieldInfoUI = 'N/A';
         else fieldInfoUI = application[field];
 
         fields.push(
@@ -91,7 +97,7 @@ export class Application extends Component {
     const fields = this.getFields();
     const { modal, editField, current } = this.state;
 
-    let editFieldUI = "";
+    let editFieldUI = '';
     if (editField)
       editFieldUI = editField.charAt(0).toUpperCase() + editField.substring(1);
 
@@ -134,7 +140,7 @@ Application.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   application: _.find(state.application.applications, [
-    "_id",
+    '_id',
     ownProps.match.params._id
   ])
 });

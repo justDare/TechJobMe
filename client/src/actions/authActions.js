@@ -13,7 +13,10 @@ import {
   USER_EDIT_FAIL,
   USER_DELETE,
   PASSWORD_RESET_SENT,
-  CLEAR_AUTH_MSG
+  CLEAR_AUTH_MSG,
+  RESET_TOKEN_OK,
+  RESET_TOKEN_ERROR,
+  PASSWORD_UPDATED_VIA_EMAIL
 } from './types';
 import { deleteAllApplications } from '../actions/applicationActions';
 
@@ -146,6 +149,25 @@ export const deleteUser = _id => (dispatch, getState) => {
     });
 };
 
+export const validatePasswordResetToken = token => dispatch => {
+  // Headers
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  axios
+    .get(`/api/auth/check-reset-token/${token}`, config)
+    .then(response => {
+      dispatch({ type: RESET_TOKEN_OK, payload: response.data });
+    })
+    .catch(err => {
+      console.log(err.response.data);
+      dispatch({ type: RESET_TOKEN_ERROR, payload: err.response.data });
+    });
+};
+
 export const forgotPasswordEmail = email => (dispatch, getState) => {
   // Request body
   const body = JSON.stringify(email);
@@ -153,7 +175,7 @@ export const forgotPasswordEmail = email => (dispatch, getState) => {
   console.log(body);
 
   axios
-    .post('api/auth/forgotPassword', body, tokenConfig(getState))
+    .post('api/auth/forgot-password', body, tokenConfig(getState))
     .then(response => {
       dispatch({ type: PASSWORD_RESET_SENT, payload: response.data });
     })
@@ -161,6 +183,33 @@ export const forgotPasswordEmail = email => (dispatch, getState) => {
       dispatch(
         returnErrors(err.response.data, err.response.status, 'EMAIL_NOT_IN_DB')
       );
+    });
+};
+
+export const updatePasswordViaEmail = ({
+  _id,
+  token,
+  password
+}) => dispatch => {
+  // Headers
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  // Request body
+  const body = JSON.stringify({ _id, token, password });
+
+  console.log('body ' + body);
+
+  axios
+    .post('/api/auth/update-password-via-email', body, config)
+    .then(response => {
+      dispatch({ type: PASSWORD_UPDATED_VIA_EMAIL, payload: response.data });
+    })
+    .catch(err => {
+      console.log(err);
     });
 };
 

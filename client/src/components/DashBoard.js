@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { deleteAllApplications } from '../actions/applicationActions';
 import PromptModal from './PromptModal';
+import store from '../store';
+import { loadUser } from '../actions/authActions';
 
 export class DashBoard extends Component {
   state = {
@@ -19,6 +21,10 @@ export class DashBoard extends Component {
     user: PropTypes.object.isRequired,
     deleteAllApplications: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
 
   componentDidUpdate(prevProps) {
     const application = this.props.application;
@@ -47,7 +53,6 @@ export class DashBoard extends Component {
   };
 
   render() {
-    console.log(this.props.application);
     return (
       <div>
         <AppNavbar />

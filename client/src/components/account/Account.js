@@ -16,6 +16,8 @@ import {
 import EditModal from '../EditModal';
 import { editUser, deleteUser } from '../../actions/authActions';
 import PromptModal from '../PromptModal';
+import store from '../../store';
+import { loadUser } from '../../actions/authActions';
 
 export class Account extends Component {
   state = {
@@ -31,6 +33,10 @@ export class Account extends Component {
     editUser: PropTypes.func.isRequired,
     deleteUser: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
 
   componentDidUpdate(prevProps) {
     const user = this.props.user;

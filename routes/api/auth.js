@@ -64,10 +64,8 @@ router.get('/user', auth, (req, res) => {
 // @route POST api/auth/forgotPassword
 // @desc Send password reset link
 // @access Public
-router.post('/forgotPassword', (req, res) => {
+router.post('/forgot-password', (req, res) => {
   const { email } = req.body;
-
-  console.log(email);
 
   // Check db for user with email
   User.findOne({ email }).then(user => {
@@ -82,10 +80,16 @@ router.post('/forgotPassword', (req, res) => {
         (err, token) => {
           if (err) throw err;
 
-          User.update({
-            resetPasswordToken: token,
-            resetPasswordExpires: Date.now + 3600000
-          });
+          User.update(
+            { email: email },
+            {
+              resetPasswordToken: token,
+              resetPasswordExpires: Date.now() + 3600000
+            },
+            (err, res) => {
+              if (err) throw err;
+            }
+          );
 
           const userEmail =
             process.env.EMAIL_USER ||
@@ -109,7 +113,8 @@ router.post('/forgotPassword', (req, res) => {
             }
           });
 
-          const url = `http://${req.headers.host}/forgotPassword/${token}`;
+          console.log(req.headers);
+          const url = `http://${req.headers['x-forwarded-host']}/forgot-password/${token}`;
 
           const mailOptions = {
             from: userEmail,
@@ -129,6 +134,50 @@ router.post('/forgotPassword', (req, res) => {
         }
       );
     }
+  });
+});
+
+// @route POST api/auth/check-reset-token/token
+// @desc Check for authourized token on password reset
+// @access Public
+router.get('/check-reset-token/:token', (req, res) => {
+  const token = req.params.token;
+
+  User.findOne({ resetPasswordToken: token })
+    .then(user => {
+      if (user === null)
+        res.status(400).send('Password reset link invalid or expired.');
+      // Token expired
+      if (user.resetPasswordExpires < Date.now())
+        res.status(400).send('Password reset link invalid or expired.');
+      // Token valid
+      else
+        res.status(200).send({
+          _id: user._id
+        });
+    })
+    .catch(err => {
+      res.status(400).send(err);
+    });
+});
+
+// @route POST api/auth/update-password-via-email
+// @desc Check for authourized token on password reset
+// @access Public
+router.post('/update-password-via-email', (req, res) => {
+  const { token, _id, password } = req.body;
+  console.log('body ' + req.body);
+  bcrypt.hash(password, 10).then(function(hash) {
+    User.findByIdAndUpdate(
+      { _id: _id, resetPasswordToken: token },
+      { password: hash, resetPasswordToken: '', resetPasswordExpires: null }
+    )
+      .then(response => {
+        res.status(200).send('Password updated.');
+      })
+      .catch(err => {
+        res.status(400).send('Error');
+      });
   });
 });
 

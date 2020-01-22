@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Alert,
-  Container
-} from 'reactstrap';
+import { Form, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { Redirect } from 'react-router-dom';
+import ForgotPasswordModal from './ForgotPasswordModal';
+
+// Material
+import IconButton from '@material-ui/core/IconButton';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 class LoginModal extends Component {
   state = {
     modal: false,
     email: '',
     password: '',
+    showPassword: false,
     msg: null
   };
 
@@ -45,6 +52,12 @@ class LoginModal extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  handleClickShowPassword = () => {
+    this.setState({
+      showPassword: !this.state.showPassword
+    });
+  };
+
   onSubmit = e => {
     e.preventDefault();
 
@@ -67,38 +80,73 @@ class LoginModal extends Component {
 
     return (
       <div>
-        <Container>
-          <h1 className="text-center mb-5">TechJobMe</h1>
-          <Form onSubmit={this.onSubmit}>
-            {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
-            ) : null}
-            <FormGroup>
-              <Label for="name">Email</Label>
-              <Input
-                type="email"
+        <h1 className="text-center mb-5">TechJobMe</h1>
+        <Form onSubmit={this.onSubmit}>
+          {this.state.msg ? (
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              {this.state.msg}
+            </Alert>
+          ) : null}
+          <FormGroup>
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel htmlFor="outlined-adornment-password">
+                Email
+              </InputLabel>
+              <OutlinedInput
                 name="email"
-                id="email"
-                placeholder="Email"
-                className="mb-3"
                 onChange={this.onChange}
+                className="mb-3"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <AccountCircle
+                      aria-label="toggle password visibility"
+                      edge="end"
+                    ></AccountCircle>
+                  </InputAdornment>
+                }
+                labelWidth={40}
               />
-
-              <Label for="name">Password</Label>
-              <Input
-                type="password"
+            </FormControl>
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                type={this.state.showPassword ? 'text' : 'password'}
+                onChange={this.onChange}
                 name="password"
-                id="password"
-                placeholder="Password"
-                className="mb-3"
-                onChange={this.onChange}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={this.handleClickShowPassword}
+                      edge="end"
+                    >
+                      {this.state.showPassword ? (
+                        <Visibility />
+                      ) : (
+                        <VisibilityOff />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                labelWidth={70}
               />
-              <Button color="dark" style={{ marginTop: '2rem' }} block>
+            </FormControl>
+            <div className="w-100 mt-5 d-flex login-form-footer">
+              <ForgotPasswordModal />
+              <Button
+                variant="contained"
+                className="w-50"
+                color="primary"
+                onClick={this.onSubmit}
+              >
                 Login
               </Button>
-            </FormGroup>
-          </Form>
-        </Container>
+            </div>
+          </FormGroup>
+        </Form>
       </div>
     );
   }

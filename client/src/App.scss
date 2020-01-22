@@ -28,3 +28,8 @@
   border: 1px solid #d73a49;
   border-radius: 3px;
 }
+
+// Overrides Bootstrap
+button:focus {
+  outline: none;
+}

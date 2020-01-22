@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Container, Alert } from 'reactstrap';
+import { Alert } from 'reactstrap';
 import LoginModal from '../auth/LoginModal';
 import RegisterModal from '../auth/RegisterModal';
-import ForgotPasswordModal from './ForgotPasswordModal';
-import './login.css';
+import './Login.scss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { clearErrors } from '../../actions/errorActions';
+
+// Material
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
 
 export class LoginLanding extends Component {
   state = {
@@ -30,15 +33,16 @@ export class LoginLanding extends Component {
   }
   render() {
     return (
-      <div className="login-card">
-        <Container>
+      <div>
+        <Container className="login-main">
           {this.state.msg ? (
             <Alert color="success">{this.state.msg}</Alert>
           ) : null}
+          <Paper className="login-card" variant="outlined">
+            <LoginModal />
+          </Paper>
+          <RegisterModal />
         </Container>
-        <LoginModal />
-        <RegisterModal />
-        <ForgotPasswordModal />
       </div>
     );
   }

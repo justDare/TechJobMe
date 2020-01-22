@@ -68,15 +68,15 @@ export class ForgotPasswordModal extends Component {
 
   render() {
     return (
-      <div>
-        <div className="text-center">
-          <span
+      <div className="forgot-password">
+        <div>
+          <h6
             className="text-primary"
             onClick={this.toggle}
             style={{ cursor: 'pointer' }}
           >
-            I Forgot My Password
-          </span>
+            Forgot password?
+          </h6>
         </div>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>

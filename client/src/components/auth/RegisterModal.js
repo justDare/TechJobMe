@@ -1,28 +1,42 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
-  Button,
   Modal,
   ModalHeader,
   ModalBody,
   Form,
   FormGroup,
   Label,
-  Input,
-  Alert
-} from "reactstrap";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { register } from "../../actions/authActions";
-import { clearErrors } from "../../actions/errorActions";
-import { Redirect } from "react-router-dom";
+  Input
+} from 'reactstrap';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { register } from '../../actions/authActions';
+import { clearErrors } from '../../actions/errorActions';
+import { Redirect } from 'react-router-dom';
+
+// Material
+import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import Dialog from '@material-ui/core/Dialog';
+import Slide from '@material-ui/core/Slide';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 class RegisterModal extends Component {
   state = {
     modal: false,
-    name: "",
-    email: "",
-    password: "",
-    passwordCheck: "",
+    name: '',
+    email: '',
+    password: '',
+    passwordCheck: '',
     msg: null
   };
 
@@ -37,7 +51,7 @@ class RegisterModal extends Component {
     const { error, isAuthenticated } = this.props;
     if (error !== prevProps.error) {
       // Check for register error
-      if (error.id === "REGISTER_FAIL") {
+      if (error.id === 'REGISTER_FAIL') {
         this.setState({ msg: error.msg.msg });
       } else {
         this.setState({ msg: null });
@@ -80,24 +94,55 @@ class RegisterModal extends Component {
   };
 
   render() {
-    return (
-      <div className="text-center">
-        <div>
-          Don't have an account?
-          <span
-            className="text-primary"
-            onClick={this.toggle}
-            style={{ cursor: "pointer" }}
-          >
-            &nbsp; Register
-          </span>
-        </div>
+    console.log(this.state);
 
-        <Modal isOpen={this.state.modal} toggle={this.toggle}>
+    return (
+      <div className="text-center mt-5">
+        <div>
+          <Typography variant="caption" display="block" gutterBottom>
+            New to TechJobMe?
+          </Typography>
+          <Divider />
+          <Button
+            onClick={this.toggle}
+            className="mt-2 w-100"
+            variant="outlined"
+            color="primary"
+          >
+            Create Account
+          </Button>
+        </div>
+        <Dialog
+          fullScreen
+          open={this.state.modal}
+          onClose={this.toggle}
+          TransitionComponent={Transition}
+        >
+          <AppBar className="position-relative">
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={this.toggle}
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+              <Typography variant="h6">Sound</Typography>
+              <Button autoFocus color="inherit" onClick={this.toggle}>
+                save
+              </Button>
+            </Toolbar>
+          </AppBar>
+        </Dialog>
+        {/* <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Register</ModalHeader>
           <ModalBody>
             {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
+              <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                {this.state.msg}
+              </Alert>
             ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
@@ -139,13 +184,13 @@ class RegisterModal extends Component {
                   className="mb-3"
                   onChange={this.onChange}
                 />
-                <Button color="dark" style={{ marginTop: "2rem" }} block>
+                <Button color="dark" style={{ marginTop: '2rem' }} block>
                   Register
                 </Button>
               </FormGroup>
             </Form>
           </ModalBody>
-        </Modal>
+        </Modal> */}
       </div>
     );
   }

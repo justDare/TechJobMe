@@ -7,7 +7,6 @@ import './login.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { clearErrors } from '../../actions/errorActions';
-import { clearAuthMessage } from '../../actions/authActions';
 
 export class LoginLanding extends Component {
   state = {
@@ -15,8 +14,7 @@ export class LoginLanding extends Component {
   };
 
   static propTypes = {
-    clearErrors: PropTypes.func.isRequired,
-    clearAuthMessage: PropTypes.func.isRequired
+    clearErrors: PropTypes.func.isRequired
   };
 
   componentDidUpdate(prevProps) {
@@ -51,6 +49,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  clearErrors,
-  clearAuthMessage
+  clearErrors
 })(LoginLanding);

@@ -54,6 +54,7 @@ export class ResetPassword extends Component {
           loading: false,
           error: true
         });
+      } else if (msg === 'Password updated.') {
       }
     }
   }

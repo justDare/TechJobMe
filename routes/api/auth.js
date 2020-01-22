@@ -98,8 +98,6 @@ router.post('/forgot-password', (req, res) => {
             process.env.EMAIL_PASS ||
             require('../../config/keys').email_password;
 
-          console.log(user, pass);
-
           const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -113,7 +111,6 @@ router.post('/forgot-password', (req, res) => {
             }
           });
 
-          console.log(req.headers);
           const url = `http://${req.headers['x-forwarded-host']}/forgot-password/${token}`;
 
           const mailOptions = {
@@ -128,7 +125,7 @@ router.post('/forgot-password', (req, res) => {
           };
 
           transporter.sendMail(mailOptions, (err, response) => {
-            if (err) res.status(400).send(err);
+            if (err) res.status(400).send('Error');
             else res.status(200).send('Recovery Email Sent!');
           });
         }

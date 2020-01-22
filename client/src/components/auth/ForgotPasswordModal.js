@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { clearErrors } from '../../actions/errorActions';
 import { forgotPasswordEmail } from '../../actions/authActions';
+import { clearAuthMessage } from '../../actions/authActions';
 
 export class ForgotPasswordModal extends Component {
   state = {
@@ -25,7 +26,8 @@ export class ForgotPasswordModal extends Component {
   static propTypes = {
     error: PropTypes.object.isRequired,
     clearErrors: PropTypes.func.isRequired,
-    forgotPasswordEmail: PropTypes.func.isRequired
+    forgotPasswordEmail: PropTypes.func.isRequired,
+    clearAuthMessage: PropTypes.func.isRequired
   };
 
   componentDidUpdate(prevProps) {
@@ -41,6 +43,7 @@ export class ForgotPasswordModal extends Component {
 
     if (this.state.modal && auth.msg === 'Recovery Email Sent!') {
       this.toggle();
+      this.props.clearAuthMessage();
     }
   }
 
@@ -110,6 +113,8 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { clearErrors, forgotPasswordEmail })(
-  ForgotPasswordModal
-);
+export default connect(mapStateToProps, {
+  clearErrors,
+  forgotPasswordEmail,
+  clearAuthMessage
+})(ForgotPasswordModal);

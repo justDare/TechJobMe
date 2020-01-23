@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import { register } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { Redirect } from 'react-router-dom';
+import './Login.scss';
 
 // Material
 import Divider from '@material-ui/core/Divider';
@@ -25,6 +26,16 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -37,6 +48,8 @@ class RegisterModal extends Component {
     email: '',
     password: '',
     passwordCheck: '',
+    showPassword: false,
+    showCheck: false,
     msg: null
   };
 
@@ -74,6 +87,18 @@ class RegisterModal extends Component {
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleClickShowPassword = () => {
+    this.setState({
+      showPassword: !this.state.showPassword
+    });
+  };
+
+  handleClickShowCheck = () => {
+    this.setState({
+      showCheck: !this.state.showCheck
+    });
   };
 
   onSubmit = e => {
@@ -128,12 +153,98 @@ class RegisterModal extends Component {
               >
                 <CloseIcon />
               </IconButton>
-              <Typography variant="h6">Sound</Typography>
-              <Button autoFocus color="inherit" onClick={this.toggle}>
-                save
-              </Button>
             </Toolbar>
           </AppBar>
+          <Container className="h-100">
+            <div className="h-100 align-items-center d-flex justify-content-center">
+              <Paper
+                className="login-card modal-holder text-center"
+                variant="outlined"
+              >
+                <form action="">
+                  <Typography className="mb-5" variant="h4">
+                    Create Account
+                  </Typography>
+                  <TextField
+                    onChange={this.onChange}
+                    className="mb-3"
+                    name="email"
+                    label="Email"
+                    variant="outlined"
+                    fullWidth
+                  />
+                  <TextField
+                    onChange={this.onChange}
+                    className="mb-3"
+                    name="name"
+                    label="Name"
+                    variant="outlined"
+                    fullWidth
+                  />
+                  <FormControl variant="outlined" className="mb-3" fullWidth>
+                    <InputLabel htmlFor="outlined-adornment-password">
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      type={this.state.showPassword ? 'text' : 'password'}
+                      onChange={this.onChange}
+                      name="password"
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={this.handleClickShowPassword}
+                            edge="end"
+                          >
+                            {this.state.showPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      labelWidth={70}
+                    />
+                  </FormControl>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel htmlFor="outlined-adornment-password">
+                      Re-type Password
+                    </InputLabel>
+                    <OutlinedInput
+                      type={this.state.showCheck ? 'text' : 'password'}
+                      onChange={this.onChange}
+                      name="passwordCheck"
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={this.handleClickShowCheck}
+                            edge="end"
+                          >
+                            {this.state.showCheck ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      labelWidth={70}
+                    />
+                  </FormControl>
+                  <Button
+                    variant="contained"
+                    className="w-50 mt-5"
+                    color="primary"
+                    onClick={this.onSubmit}
+                  >
+                    Create
+                  </Button>
+                </form>
+              </Paper>
+            </div>
+          </Container>
         </Dialog>
         {/* <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Register</ModalHeader>

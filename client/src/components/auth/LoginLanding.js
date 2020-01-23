@@ -34,14 +34,16 @@ export class LoginLanding extends Component {
   render() {
     return (
       <div>
-        <Container className="login-main">
-          {this.state.msg ? (
-            <Alert color="success">{this.state.msg}</Alert>
-          ) : null}
-          <Paper className="login-card" variant="outlined">
-            <LoginModal />
-          </Paper>
-          <RegisterModal />
+        <Container>
+          <div className="login-main">
+            {this.state.msg ? (
+              <Alert color="success">{this.state.msg}</Alert>
+            ) : null}
+            <Paper className="login-card" variant="outlined">
+              <LoginModal />
+            </Paper>
+            <RegisterModal />
+          </div>
         </Container>
       </div>
     );

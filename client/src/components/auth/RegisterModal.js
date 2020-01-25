@@ -1,13 +1,4 @@
 import React, { Component } from 'react';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Form,
-  FormGroup,
-  Label,
-  Input
-} from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { register } from '../../actions/authActions';
@@ -19,7 +10,6 @@ import './Login.scss';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Alert, AlertTitle } from '@material-ui/lab';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import AppBar from '@material-ui/core/AppBar';
@@ -32,14 +22,19 @@ import Container from '@material-ui/core/Container';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import { Alert } from '@material-ui/lab';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const TransitionUp = props => {
+  return <Slide {...props} direction="up" />;
+};
 
 class RegisterModal extends Component {
   state = {
@@ -50,7 +45,8 @@ class RegisterModal extends Component {
     passwordCheck: '',
     showPassword: false,
     showCheck: false,
-    msg: null
+    msg: null,
+    snackBar: false
   };
 
   static propTypes = {
@@ -66,6 +62,7 @@ class RegisterModal extends Component {
       // Check for register error
       if (error.id === 'REGISTER_FAIL') {
         this.setState({ msg: error.msg.msg });
+        this.toggleSnack();
       } else {
         this.setState({ msg: null });
       }
@@ -82,6 +79,12 @@ class RegisterModal extends Component {
     this.props.clearErrors();
     this.setState({
       modal: !this.state.modal
+    });
+  };
+
+  toggleSnack = () => {
+    this.setState({
+      snackBar: !this.state.snackBar
     });
   };
 
@@ -106,6 +109,12 @@ class RegisterModal extends Component {
 
     const { name, email, password, passwordCheck } = this.state;
 
+    if (password !== passwordCheck) {
+      this.setState({ msg: 'Passwords do not match.' });
+      this.toggleSnack();
+      return;
+    }
+
     // Create user object
     const newUser = {
       name,
@@ -119,8 +128,6 @@ class RegisterModal extends Component {
   };
 
   render() {
-    console.log(this.state);
-
     return (
       <div className="text-center mt-5">
         <div>
@@ -161,7 +168,7 @@ class RegisterModal extends Component {
                 className="login-card modal-holder text-center"
                 variant="outlined"
               >
-                <form action="">
+                <form onSubmit={this.onSubmit}>
                   <Typography className="mb-5" variant="h4">
                     Create Account
                   </Typography>
@@ -172,6 +179,7 @@ class RegisterModal extends Component {
                     label="Email"
                     variant="outlined"
                     fullWidth
+                    required={true}
                   />
                   <TextField
                     onChange={this.onChange}
@@ -180,6 +188,7 @@ class RegisterModal extends Component {
                     label="Name"
                     variant="outlined"
                     fullWidth
+                    required={true}
                   />
                   <FormControl variant="outlined" className="mb-3" fullWidth>
                     <InputLabel htmlFor="outlined-adornment-password">
@@ -189,6 +198,7 @@ class RegisterModal extends Component {
                       type={this.state.showPassword ? 'text' : 'password'}
                       onChange={this.onChange}
                       name="password"
+                      required={true}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton
@@ -215,6 +225,7 @@ class RegisterModal extends Component {
                       type={this.state.showCheck ? 'text' : 'password'}
                       onChange={this.onChange}
                       name="passwordCheck"
+                      required={true}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton
@@ -237,7 +248,7 @@ class RegisterModal extends Component {
                     variant="contained"
                     className="w-50 mt-5"
                     color="primary"
-                    onClick={this.onSubmit}
+                    type="submit"
                   >
                     Create
                   </Button>
@@ -246,62 +257,16 @@ class RegisterModal extends Component {
             </div>
           </Container>
         </Dialog>
-        {/* <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Register</ModalHeader>
-          <ModalBody>
-            {this.state.msg ? (
-              <Alert severity="error">
-                <AlertTitle>Error</AlertTitle>
-                {this.state.msg}
-              </Alert>
-            ) : null}
-            <Form onSubmit={this.onSubmit}>
-              <FormGroup>
-                <Label for="name">Name</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Name"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-
-                <Label for="name">Email</Label>
-                <Input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Email"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-
-                <Label for="name">Password</Label>
-                <Input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Password"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-                <Label for="name">Re-Type Password</Label>
-                <Input
-                  type="password"
-                  name="passwordCheck"
-                  id="passwordCheck"
-                  placeholder="Re-Type Password"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-                <Button color="dark" style={{ marginTop: '2rem' }} block>
-                  Register
-                </Button>
-              </FormGroup>
-            </Form>
-          </ModalBody>
-        </Modal> */}
+        <Snackbar
+          open={this.state.snackBar}
+          onClose={this.toggleSnack}
+          TransitionComponent={TransitionUp}
+          autoHideDuration={6000}
+        >
+          <Alert severity="error" variant="filled" onClose={this.toggleSnack}>
+            {this.state.msg}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

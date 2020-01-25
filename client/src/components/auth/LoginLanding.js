@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Alert } from 'reactstrap';
 import LoginModal from '../auth/LoginModal';
 import RegisterModal from '../auth/RegisterModal';
 import './Login.scss';
@@ -10,10 +9,19 @@ import { clearErrors } from '../../actions/errorActions';
 // Material
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
+import Slide from '@material-ui/core/Slide';
+import { Alert } from '@material-ui/lab';
+import Snackbar from '@material-ui/core/Snackbar';
+
+const TransitionUp = props => {
+  return <Slide {...props} direction="up" />;
+};
 
 export class LoginLanding extends Component {
   state = {
-    msg: null
+    msg: null,
+    error: false,
+    snackBar: false
   };
 
   static propTypes = {
@@ -21,37 +29,66 @@ export class LoginLanding extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    const { msg } = this.props.auth;
+    const msg = this.props.auth.msg;
+    const error = this.props.error;
+
     if (msg !== prevProps.auth.msg) {
       // Check for register error
-      if (msg === 'Recovery Email Sent!') {
+      if (msg === 'Recovery email sent!') {
         this.setState({ msg: msg });
+        this.toggleSnack();
       } else {
         this.setState({ msg: null });
       }
     }
+
+    if (error !== prevProps.error) {
+      if (error.id === 'EMAIL_NOT_IN_DB') {
+        this.setState({ msg: error.msg });
+      }
+    }
   }
+
+  toggleSnack = () => {
+    this.setState({
+      snackBar: !this.state.snackBar
+    });
+  };
+
   render() {
+    console.log(this.state);
     return (
       <div>
         <Container>
           <div className="login-main">
-            {this.state.msg ? (
-              <Alert color="success">{this.state.msg}</Alert>
-            ) : null}
             <Paper className="login-card" variant="outlined">
               <LoginModal />
             </Paper>
             <RegisterModal />
           </div>
         </Container>
+        <Snackbar
+          open={this.state.snackBar}
+          onClose={this.toggleSnack}
+          TransitionComponent={TransitionUp}
+          autoHideDuration={6000}
+        >
+          <Alert
+            severity={this.state.error ? 'error' : 'success'}
+            variant="filled"
+            onClose={this.toggleSnack}
+          >
+            {this.state.msg}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  error: state.error
 });
 
 export default connect(mapStateToProps, {

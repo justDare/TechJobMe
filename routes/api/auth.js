@@ -126,7 +126,7 @@ router.post('/forgot-password', (req, res) => {
 
           transporter.sendMail(mailOptions, (err, response) => {
             if (err) res.status(400).send('Error');
-            else res.status(200).send('Recovery Email Sent!');
+            else res.status(200).send('Recovery email sent!');
           });
         }
       );

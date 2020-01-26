@@ -5,6 +5,8 @@ import './Login.scss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { clearErrors } from '../../actions/errorActions';
+import store from '../../store';
+import { loadUser } from '../../actions/authActions';
 
 // Material
 import Paper from '@material-ui/core/Paper';
@@ -27,6 +29,10 @@ export class LoginLanding extends Component {
   static propTypes = {
     clearErrors: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
 
   componentDidUpdate(prevProps) {
     const msg = this.props.auth.msg;
@@ -56,7 +62,6 @@ export class LoginLanding extends Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <Container>

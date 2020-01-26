@@ -118,10 +118,10 @@ router.post('/forgot-password', (req, res) => {
             to: user.email,
             subject: 'Link To Reset Password',
             text:
-              'You are recieving this because you (or someone else) have requested the reset of the passwor for your account at TechJobMe. \n\n' +
+              'You are recieving this because you (or someone else) have requested the reset of the password for your account at TechJobMe. \n\n' +
               'Please click on the following link, or paste this into your browser within one hour to complete your password reset: \n\n' +
               `${url}\n\n` +
-              'If you did not recieve this request, contact TechJobMe right away.'
+              'If you did not request this please contact TechJobMe right away.'
           };
 
           transporter.sendMail(mailOptions, (err, response) => {

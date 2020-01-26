@@ -18,7 +18,13 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert } from '@material-ui/lab';
+import Slide from '@material-ui/core/Slide';
+import Snackbar from '@material-ui/core/Snackbar';
+
+const TransitionUp = props => {
+  return <Slide {...props} direction="up" />;
+};
 
 class LoginModal extends Component {
   state = {
@@ -26,7 +32,8 @@ class LoginModal extends Component {
     email: '',
     password: '',
     showPassword: false,
-    msg: null
+    msg: null,
+    snackBar: false
   };
 
   static propTypes = {
@@ -42,11 +49,18 @@ class LoginModal extends Component {
       // Check for register error
       if (error.id === 'LOGIN_FAIL') {
         this.setState({ msg: error.msg.msg });
+        this.toggleSnack();
       } else {
         this.setState({ msg: null });
       }
     }
   }
+
+  toggleSnack = () => {
+    this.setState({
+      snackBar: !this.state.snackBar
+    });
+  };
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -82,12 +96,6 @@ class LoginModal extends Component {
       <div>
         <h1 className="text-center mb-5">TechJobMe</h1>
         <Form onSubmit={this.onSubmit}>
-          {this.state.msg ? (
-            <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-              {this.state.msg}
-            </Alert>
-          ) : null}
           <FormGroup>
             <FormControl variant="outlined" fullWidth>
               <InputLabel htmlFor="outlined-adornment-password">
@@ -140,13 +148,23 @@ class LoginModal extends Component {
                 variant="contained"
                 className="w-50"
                 color="primary"
-                onClick={this.onSubmit}
+                type="submit"
               >
                 Login
               </Button>
             </div>
           </FormGroup>
         </Form>
+        <Snackbar
+          open={this.state.snackBar}
+          onClose={this.toggleSnack}
+          TransitionComponent={TransitionUp}
+          autoHideDuration={6000}
+        >
+          <Alert severity="error" variant="filled" onClose={this.toggleSnack}>
+            {this.state.msg}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

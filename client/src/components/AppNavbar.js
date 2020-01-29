@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 import {
   Collapse,
   Navbar,
@@ -8,11 +8,10 @@ import {
   NavItem,
   Container,
   NavLink
-} from "reactstrap";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import Logout from "./auth/Logout";
-import { Link } from "react-router-dom";
+} from 'reactstrap';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class AppNavbar extends Component {
   state = {
@@ -36,7 +35,7 @@ class AppNavbar extends Component {
       <Fragment>
         <NavItem>
           <span className="navbar-text mr-3">
-            <strong>{user ? `Welcome ${user.name}!` : ""}</strong>
+            <strong>{user ? `Welcome ${user.name}!` : ''}</strong>
           </span>
         </NavItem>
         <NavItem>
@@ -49,9 +48,7 @@ class AppNavbar extends Component {
             Account
           </NavLink>
         </NavItem>
-        <NavItem>
-          <Logout />
-        </NavItem>
+        <NavItem></NavItem>
       </Fragment>
     );
 

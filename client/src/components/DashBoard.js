@@ -5,10 +5,16 @@ import ApplicationModal from '../components/ApplicationModal';
 import { Container, Button, Alert } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { deleteAllApplications } from '../actions/applicationActions';
+import {
+  deleteAllApplications,
+  clearApplications
+} from '../actions/applicationActions';
 import PromptModal from './PromptModal';
 import store from '../store';
-import { loadUser } from '../actions/authActions';
+import { loadUser, logout } from '../actions/authActions';
+import { Route, Switch, Link } from 'react-router-dom';
+import Account from './account/Account';
+import Application from './Application';
 import './Dashboard.scss';
 
 // Material
@@ -26,39 +32,7 @@ import IconButton from '@material-ui/core/IconButton';
 import HomeTwoToneIcon from '@material-ui/icons/HomeTwoTone';
 import AccountCircleTwoToneIcon from '@material-ui/icons/AccountCircleTwoTone';
 import ExitToAppTwoToneIcon from '@material-ui/icons/ExitToAppTwoTone';
-
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
-
-const drawer = (
-  <div>
-    <Divider />
-    <List>
-      <ListItem button>
-        <ListItemIcon>
-          <HomeTwoToneIcon />
-        </ListItemIcon>
-        <ListItemText primary="Dashboard" />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <AccountCircleTwoToneIcon />
-        </ListItemIcon>
-        <ListItemText primary="Account" />
-      </ListItem>
-    </List>
-    <Divider />
-    <List>
-      <ListItem button>
-        <ListItemIcon>
-          <ExitToAppTwoToneIcon />
-        </ListItemIcon>
-        <ListItemText primary="Logout" />
-      </ListItem>
-    </List>
-  </div>
-);
 
 export class DashBoard extends Component {
   state = {
@@ -70,7 +44,9 @@ export class DashBoard extends Component {
   static propTypes = {
     application: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    deleteAllApplications: PropTypes.func.isRequired
+    deleteAllApplications: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    clearApplications: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -93,6 +69,11 @@ export class DashBoard extends Component {
     }
   }
 
+  logout = () => {
+    this.props.clearApplications();
+    this.props.logout();
+  };
+
   handleDrawerToggle = () => {
     this.setState({
       mobileOpen: !this.state.mobileOpen
@@ -109,7 +90,46 @@ export class DashBoard extends Component {
     });
   };
 
+  getDrawer = () => {
+    return (
+      <div>
+        <Divider />
+        <List>
+          <ApplicationModal />
+          <Link to="/dashboard">
+            <ListItem button>
+              <ListItemIcon>
+                <HomeTwoToneIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+          </Link>
+          <Link to="/dashboard/account">
+            <ListItem button>
+              <ListItemIcon>
+                <AccountCircleTwoToneIcon />
+              </ListItemIcon>
+              <ListItemText primary="Account" />
+            </ListItem>
+          </Link>
+        </List>
+        <Divider />
+        <List>
+          <ListItem button onClick={this.logout} href="#">
+            <ListItemIcon>
+              <ExitToAppTwoToneIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItem>
+        </List>
+      </div>
+    );
+  };
+
   render() {
+    const drawer = this.getDrawer();
+    const path = this.props.match;
+
     return (
       <div className="d-flex">
         {/* <AppNavbar /> */}
@@ -137,7 +157,6 @@ export class DashBoard extends Component {
               anchor="left"
               open={this.state.mobileOpen}
               onClose={this.handleDrawerToggle}
-              classes=""
               ModalProps={{
                 keepMounted: true // Better open performance on mobile.
               }}
@@ -155,25 +174,21 @@ export class DashBoard extends Component {
           {this.state.msg ? (
             <Alert color="success">{this.state.msg}</Alert>
           ) : null}
-          <ApplicationModal />
-          {this.props.application.applications.length ? (
-            <Button color="danger" onClick={() => this.togglePrompt()}>
-              Delete All Applications
-            </Button>
-          ) : (
-            ''
-          )}
-          <JobApplications />
+          <Switch>
+            <Route exact path="/dashboard">
+              <JobApplications />
+            </Route>
+            <Route exact path="/dashboard/account">
+              <Account />
+            </Route>
+            <Route
+              path="/dashboard/application/:_id"
+              render={props => <Application {...props} />}
+            />
+          </Switch>
+
+          {/* <JobApplications /> */}
         </Container>
-        <PromptModal
-          modalAction={this.deleteAllApplications}
-          toggle={this.togglePrompt}
-          modal={this.state.promptModal}
-          title="Delete All Applications"
-          body="Are you sure you wish to delete all of your applications? All of them will be gone forever."
-          cancel="No, I like them"
-          confirm="Yes, delete all of my applications"
-        />
       </div>
     );
   }
@@ -184,4 +199,8 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps, { deleteAllApplications })(DashBoard);
+export default connect(mapStateToProps, {
+  deleteAllApplications,
+  logout,
+  clearApplications
+})(DashBoard);

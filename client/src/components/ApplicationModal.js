@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Button,
   Modal,
@@ -9,21 +9,25 @@ import {
   Label,
   Input,
   Alert
-} from "reactstrap";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { addApplication } from "../actions/applicationActions";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+} from 'reactstrap';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { addApplication } from '../actions/applicationActions';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+// Material
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 class ApplicationModal extends Component {
   state = {
     modal: false,
-    name: "",
-    position: "",
-    link: "",
-    contact: "",
-    stage: "",
+    name: '',
+    position: '',
+    link: '',
+    contact: '',
+    stage: '',
     date: new Date(),
     msg: null
   };
@@ -32,7 +36,7 @@ class ApplicationModal extends Component {
     const { error } = this.props;
     if (error !== prevProps.error) {
       // Check for register error
-      if (error.id === "ADD_APPLICATION_FAIL") {
+      if (error.id === 'ADD_APPLICATION_FAIL') {
         this.setState({ msg: error.msg.msg });
       } else {
         this.setState({ msg: null });
@@ -87,14 +91,11 @@ class ApplicationModal extends Component {
 
   render() {
     return (
-      <div>
-        <Button
-          color="dark"
-          style={{ marginBottom: "2rem" }}
-          onClick={this.toggle}
-        >
+      <div className="mt-1 mb-2 pl-2">
+        <Fab variant="extended" onClick={this.toggle}>
+          <AddIcon className="mr-2" size="medium" />
           Add Application
-        </Button>
+        </Fab>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Add Application</ModalHeader>
           <ModalBody>
@@ -166,7 +167,7 @@ class ApplicationModal extends Component {
                   todayButton="Today"
                   shouldCloseOnSelect={true}
                 />
-                <Button color="dark" style={{ marginTop: "2rem" }} block>
+                <Button color="dark" style={{ marginTop: '2rem' }} block>
                   Add Application
                 </Button>
               </FormGroup>

@@ -1,15 +1,5 @@
 import React, { Component } from 'react';
-import AppNavbar from '../components/AppNavbar';
-import {
-  Container,
-  Button,
-  ListGroup,
-  ListGroupItem,
-  ListGroupItemHeading,
-  ListGroupItemText,
-  Alert
-} from 'reactstrap';
-
+import { Container, Button, Alert } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -20,6 +10,19 @@ import { editApplication } from '../actions/applicationActions';
 import { formatDateString } from '../utilities/helperFunctions';
 import store from '../store';
 import { loadUser } from '../actions/authActions';
+import './JobApplications.scss';
+
+// Material
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import Paper from '@material-ui/core/Paper';
+import Toolbar from '@material-ui/core/Toolbar';
+import Grid from '@material-ui/core/Grid';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 export class Application extends Component {
   state = {
@@ -69,7 +72,6 @@ export class Application extends Component {
     };
 
     for (let field in application) {
-      console.log(field);
       if (!nonUIFields[field]) {
         let fieldHeadingUI = field.charAt(0).toUpperCase() + field.substring(1);
         if (field === 'name') fieldHeadingUI = `Company Name`;
@@ -80,11 +82,26 @@ export class Application extends Component {
         else fieldInfoUI = application[field];
 
         fields.push(
-          <ListGroupItem key={field}>
-            <ListGroupItemHeading>{fieldHeadingUI}</ListGroupItemHeading>
-            <ListGroupItemText>{fieldInfoUI}</ListGroupItemText>
-            <MdEdit onClick={() => this.toggle(field, application[field])} />
-          </ListGroupItem>
+          <Grid
+            item
+            xs={12}
+            className="grid-item"
+            onClick={() => this.toggle(field, application[field])}
+          >
+            <Grid container spacing={1}>
+              <Grid item xs={4} className="align-items-center d-flex pl-4">
+                <Typography variant="overline">{fieldHeadingUI}</Typography>
+              </Grid>
+              <Grid item xs={7} className="align-items-center d-flex">
+                <Typography variant="body1">{fieldInfoUI}</Typography>
+              </Grid>
+              <Grid item xs={1}>
+                <IconButton edge="end" aria-label="edit">
+                  <ArrowForwardIosIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Grid>
         );
       }
     }
@@ -103,31 +120,30 @@ export class Application extends Component {
 
     return (
       <div>
-        <AppNavbar />
-        <Container>
-          <EditModal
-            modal={modal}
-            editField={editField}
-            editFieldUI={editFieldUI}
-            toggle={this.toggle}
-            current={current}
-            editSuccess={this.editSuccess}
-            editAction={this.props.editApplication}
-            stateToUpdate={application}
-          />
-          <Link to="/dashboard">
-            <Button className="mb-3" color="primary">
-              Back
-            </Button>
-          </Link>
-          <h1 className="mb-3">{application.name} Application</h1>
-          <ListGroup>
+        <EditModal
+          modal={modal}
+          editField={editField}
+          editFieldUI={editFieldUI}
+          toggle={this.toggle}
+          current={current}
+          editSuccess={this.editSuccess}
+          editAction={this.props.editApplication}
+          stateToUpdate={application}
+        />
+        <Link to="/dashboard">
+          <ArrowBackIcon className="mb-3" />
+        </Link>
+        <Paper variant="outlined" elevation={2} className="grid-paper">
+          <Toolbar>
+            <Typography variant="h6">{application.name} Application</Typography>
+          </Toolbar>
+          <Grid container spacing={1} className="grid-main">
             {this.state.msg ? (
               <Alert color="success">{this.state.msg}</Alert>
             ) : null}
             {fields}
-          </ListGroup>
-        </Container>
+          </Grid>
+        </Paper>
       </div>
     );
   }

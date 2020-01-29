@@ -1,20 +1,54 @@
-import React, { Component } from "react";
-import { Row, Col, Button } from "reactstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Row, Col, Button } from 'reactstrap';
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import {
   getApplications,
-  deleteApplication
-} from "../actions/applicationActions";
-import PropTypes from "prop-types";
-import { formatDateString } from "../utilities/helperFunctions";
-import "./JobApplications.scss";
+  deleteApplication,
+  deleteAllApplications
+} from '../actions/applicationActions';
+import PropTypes from 'prop-types';
+import { formatDateString } from '../utilities/helperFunctions';
+import './JobApplications.scss';
+
+// Material
+import MaterialTable, { MTableBodyRow } from 'material-table';
 
 class JobApplications extends Component {
+  state = {
+    columns: [
+      { title: 'Name', field: 'name' },
+      { title: 'Position', field: 'position' },
+      { title: 'Date', field: 'date' },
+      { title: 'Stage', field: 'stage' },
+      { title: '_id', field: '_id', hidden: true }
+    ],
+    data: [],
+    redirect: 0
+  };
   componentDidMount() {
     const user = this.props.auth.user;
     if (user) this.props.getApplications(user._id);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.application !== this.props.application) {
+      let UIfields = [];
+
+      this.props.application.applications.forEach(function(application) {
+        const picked = (({ name, position, date, stage, _id }) => ({
+          name,
+          position,
+          date,
+          stage,
+          _id
+        }))(application);
+        picked.date = formatDateString(picked.date);
+        UIfields.push(picked);
+      });
+
+      this.setState({ data: UIfields });
+    }
   }
 
   onDeleteClick = (id, e) => {
@@ -27,45 +61,31 @@ class JobApplications extends Component {
 
     // sent: "yellow" , reject: "red", phone-screen: "purple" , onsite: "blue" , offer: "green"
     const statusColors = {
-      "Application Sent": "yellow",
-      "No Offer": "red",
-      "Phone Screen": "purple",
-      "On-Site": "blue",
-      Offer: "green"
+      'Application Sent': 'yellow',
+      'No Offer': 'red',
+      'Phone Screen': 'purple',
+      'On-Site': 'blue',
+      Offer: 'green'
     };
 
+    if (this.state.redirect) {
+      return (
+        <Redirect push to={`/dashboard/application/${this.state.redirect}`} />
+      );
+    }
+
     return (
-      <TransitionGroup className="job-applications">
-        {applications.map(application => (
-          <CSSTransition key={application._id} timeout={500} classNames="fade">
-            <Row
-              className="application-row position-relative"
-              tag={Link}
-              to={{
-                pathname: `/application/${application._id}`
-              }}
-            >
-              <Col xs="2">
-                <Button
-                  className="remove-btn"
-                  color="danger"
-                  size="small"
-                  onClick={this.onDeleteClick.bind(this, application._id)}
-                >
-                  &times;
-                </Button>
-              </Col>
-              <Col xs="3">{application.name}</Col>
-              <Col xs="3">{application.position}</Col>
-              <Col xs="3">{formatDateString(application.date)}</Col>
-              <Col xs="1"></Col>
-              <span
-                className={`status status-${statusColors[application.stage]}`}
-              ></span>
-            </Row>
-          </CSSTransition>
-        ))}
-      </TransitionGroup>
+      <MaterialTable
+        title="Job Applications"
+        columns={this.state.columns}
+        data={this.state.data}
+        onRowClick={(event, rowData) =>
+          this.setState({ redirect: rowData._id })
+        }
+        components={{
+          Row: props => <MTableBodyRow app_id={props.data._id} {...props} />
+        }}
+      />
     );
   }
 }
@@ -82,6 +102,8 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { getApplications, deleteApplication })(
-  JobApplications
-);
+export default connect(mapStateToProps, {
+  getApplications,
+  deleteApplication,
+  deleteAllApplications
+})(JobApplications);

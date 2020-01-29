@@ -24,13 +24,7 @@ class App extends Component {
                 path="/forgot-password/:token"
                 component={PasswordReset}
               />
-              <PrivateRoute exact path="/dashboard" component={DashBoard} />
-              <PrivateRoute
-                exact
-                path="/application/:_id"
-                component={Application}
-              />
-              <PrivateRoute exact path="/account" component={Account} />
+              <PrivateRoute path="/dashboard" component={DashBoard} />
             </Switch>
           </div>
         </Router>

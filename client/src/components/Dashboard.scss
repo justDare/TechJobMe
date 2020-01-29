@@ -1,4 +1,4 @@
-$drawer-width: 200px;
+$drawer-width: 240px;
 
 .side-bar {
   @media screen and (min-width: 600px) {
@@ -12,11 +12,23 @@ $drawer-width: 200px;
   }
 }
 
-.app-bar .MuiAppBar-root {
+.MuiListItemIcon-root {
+  min-width: 36px !important;
+}
+
+.drawer-mobile .MuiDrawer-paper {
+  width: $drawer-width;
+}
+
+.MuiDrawer-paper {
+  z-index: 1000 !important;
+}
+
+.MuiAppBar-root {
   z-index: 1000 !important;
 }
 
 .content {
   flex-grow: 1;
-  margin-top: 65px;
+  margin-top: 80px;
 }

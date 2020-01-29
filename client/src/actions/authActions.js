@@ -116,7 +116,7 @@ export const editUser = fields => (dispatch, getState) => {
   const body = JSON.stringify(fields);
 
   axios
-    .post('api/users/edit', body, tokenConfig(getState))
+    .post('/api/users/edit', body, tokenConfig(getState))
     .then(response =>
       dispatch({
         type: USER_EDIT_SUCCESS,
@@ -135,7 +135,7 @@ export const editUser = fields => (dispatch, getState) => {
 
 export const deleteUser = _id => (dispatch, getState) => {
   axios
-    .delete(`api/users/delete/${_id}`, tokenConfig(getState))
+    .delete(`/api/users/delete/${_id}`, tokenConfig(getState))
     .then(() => {
       dispatch({
         type: USER_DELETE

@@ -30,5 +30,11 @@ $drawer-width: 240px;
 
 .content {
   flex-grow: 1;
-  margin-top: 80px;
+  margin-top: 64px;
+  padding-top: 15px;
+  min-height: 100vh;
+}
+
+.dash-loading {
+  z-index: 100 !important;
 }

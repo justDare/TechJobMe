@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Button,
   Modal,
   ModalHeader,
   ModalBody,
@@ -19,10 +18,26 @@ import 'react-datepicker/dist/react-datepicker.css';
 // Material
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from '@material-ui/pickers';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
 
 class ApplicationModal extends Component {
   state = {
-    modal: false,
+    modal: false, // delete
+    dialog: false,
     name: '',
     position: '',
     link: '',
@@ -56,9 +71,9 @@ class ApplicationModal extends Component {
     error: PropTypes.object.isRequired
   };
 
-  toggle = () => {
+  toggleDialog = () => {
     this.setState({
-      modal: !this.state.modal
+      dialog: !this.state.dialog
     });
   };
 
@@ -86,16 +101,109 @@ class ApplicationModal extends Component {
     };
 
     // Add application via add application action
+    this.toggleDialog();
     this.props.addApplication(newApplication);
   };
 
   render() {
     return (
       <div className="mt-1 mb-2 pl-2">
-        <Fab variant="extended" onClick={this.toggle}>
+        <Fab variant="extended" onClick={this.toggleDialog}>
           <AddIcon className="mr-2" size="medium" />
           Add Application
         </Fab>
+
+        <Dialog
+          open={this.state.dialog}
+          onClose={this.toggleDialog}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Add Application</DialogTitle>
+          <DialogContent>
+            <form onSubmit={this.onSubmit}>
+              <TextField
+                autoFocus
+                margin="dense"
+                name="name"
+                label="Company name"
+                type="text"
+                onChange={this.onChange}
+                required
+                fullWidth
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                name="position"
+                label="Position"
+                type="text"
+                onChange={this.onChange}
+                required
+                fullWidth
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                name="link"
+                label="Job posting URL"
+                type="text"
+                onChange={this.onChange}
+                fullWidth
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                name="contact"
+                label="Recruiter Contact Email"
+                type="text"
+                onChange={this.onChange}
+                fullWidth
+              />
+              <FormControl margin="dense" className="mt-3" fullWidth>
+                <Select
+                  name="stage"
+                  value={this.state.stage}
+                  onChange={this.onChange}
+                  displayEmpty
+                  required
+                  autoWidth
+                >
+                  <MenuItem value="" disabled>
+                    Application stage
+                  </MenuItem>
+                  <MenuItem value="Application Sent">Application Sent</MenuItem>
+                  <MenuItem value="No Offer">No Offer</MenuItem>
+                  <MenuItem value="Phone Screen">Phone Screen</MenuItem>
+                  <MenuItem value="On-Site">On-Site</MenuItem>
+                  <MenuItem value="Offer">Offer</MenuItem>
+                </Select>
+              </FormControl>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  disableToolbar
+                  variant="inline"
+                  format="MM/dd/yyyy"
+                  margin="dense"
+                  label="Select a date"
+                  value={this.state.date}
+                  onChange={this.setDate}
+                  KeyboardButtonProps={{
+                    'aria-label': 'change date'
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+              <div className="text-right mt-4">
+                <Button onClick={this.toggleDialog} color="primary">
+                  Cancel
+                </Button>
+                <Button type="submit" color="primary">
+                  Add Application
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Add Application</ModalHeader>
           <ModalBody>

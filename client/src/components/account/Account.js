@@ -15,6 +15,7 @@ import { editUser, deleteUser } from '../../actions/authActions';
 import PromptModal from '../PromptModal';
 import store from '../../store';
 import { loadUser } from '../../actions/authActions';
+import { deleteAllApplications } from '../../actions/applicationActions';
 
 // Material
 import Paper from '@material-ui/core/Paper';
@@ -28,21 +29,29 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Snackbar from '@material-ui/core/Snackbar';
+import Slide from '@material-ui/core/Slide';
+
+const TransitionUp = props => {
+  return <Slide {...props} direction="up" />;
+};
 
 export class Account extends Component {
   state = {
     modal: false,
     promptModal: false,
-    promptModalAppa: false,
+    promptModalApps: false,
     editField: '',
     current: '',
-    msg: ''
+    msg: '',
+    snackBar: false
   };
 
   static propTypes = {
     user: PropTypes.object,
     editUser: PropTypes.func.isRequired,
-    deleteUser: PropTypes.func.isRequired
+    deleteUser: PropTypes.func.isRequired,
+    deleteAllApplications: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -50,7 +59,7 @@ export class Account extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const user = this.props.user;
+    const { user, application } = this.props;
 
     // Alert when edit successful
     if (user !== prevProps.user) {
@@ -60,8 +69,17 @@ export class Account extends Component {
           this.setState({
             msg: `${fieldUI} updated successfully!`
           });
+          this.toggleSnack();
         }
       }
+    }
+
+    if (application.msg !== prevProps.application.msg) {
+      this.setState({
+        msg: application.msg
+      });
+      this.togglePromptApps();
+      this.toggleSnack();
     }
   }
 
@@ -81,7 +99,7 @@ export class Account extends Component {
 
   togglePromptApps = () => {
     this.setState({
-      promptModal: !this.state.promptModalApps
+      promptModalApps: !this.state.promptModalApps
     });
   };
 
@@ -91,6 +109,12 @@ export class Account extends Component {
 
   deleteAllApplications = () => {
     this.props.deleteAllApplications(this.props.user._id);
+  };
+
+  toggleSnack = () => {
+    this.setState({
+      snackBar: !this.state.snackBar
+    });
   };
 
   render() {
@@ -117,9 +141,6 @@ export class Account extends Component {
             <Typography variant="h6">Account Settings</Typography>
           </Toolbar>
           <Grid container spacing={1} className="grid-main">
-            {this.state.msg ? (
-              <Alert color="success">{this.state.msg}</Alert>
-            ) : null}
             <Grid
               item
               xs={12}
@@ -178,55 +199,26 @@ export class Account extends Component {
               </Grid>
             </Grid>
           </Grid>
-
-          <ListGroup>
-            {/* {this.state.msg ? (
-              <Alert color="success">{this.state.msg}</Alert>
-            ) : null} */}
-            {/* <ListGroupItem key={`${user._id}name`}>
-              <ListGroupItemHeading>Name</ListGroupItemHeading>
-              <ListGroupItemText>{user.name}</ListGroupItemText>
-              <MdEdit onClick={() => this.toggle('name', user.name)} />
-            </ListGroupItem> */}
-            {/* <ListGroupItem key={`${user._id}email`}>
-              <ListGroupItemHeading>Email</ListGroupItemHeading>
-              <ListGroupItemText>{user.email}</ListGroupItemText>
-              <MdEdit onClick={() => this.toggle('email', user.email)} />
-            </ListGroupItem> */}
-            {/* <ListGroupItem key={`${user._id}password`}>
-              <ListGroupItemHeading>Change Password</ListGroupItemHeading>
-              <MdEdit onClick={() => this.toggle('password')} />
-            </ListGroupItem> */}
-          </ListGroup>
         </Paper>
         <Paper variant="outlined" className="grid-paper mt-3" elevation={2}>
           <Toolbar>
             <Typography variant="h6">Danger Zone</Typography>
           </Toolbar>
-          {this.state.msg ? (
-            <Alert color="success">{this.state.msg}</Alert>
-          ) : null}
           <Alert
             variant="outlined"
             severity="error"
             className="ml-4 mr-4 mb-2 align-items-center"
             action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
+              <Button
+                variant="contained"
+                color="secondary"
                 onClick={() => {
                   this.togglePrompt();
                 }}
+                startIcon={<DeleteIcon />}
               >
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  startIcon={<DeleteIcon />}
-                >
-                  Delete
-                </Button>
-              </IconButton>
+                Delete
+              </Button>
             }
           >
             <AlertTitle className="mb-0">Delete My Account</AlertTitle>
@@ -236,22 +228,16 @@ export class Account extends Component {
             severity="error"
             className="ml-4 mr-4 mb-2 align-items-center"
             action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
+              <Button
+                variant="contained"
+                color="secondary"
                 onClick={() => {
                   this.togglePromptApps();
                 }}
+                startIcon={<DeleteIcon />}
               >
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  startIcon={<DeleteIcon />}
-                >
-                  Delete
-                </Button>
-              </IconButton>
+                Delete
+              </Button>
             }
           >
             <AlertTitle className="mb-0">Delete All My Applications</AlertTitle>
@@ -275,13 +261,28 @@ export class Account extends Component {
           cancel="No, I like them"
           confirm="Yes, delete all of my applications"
         />
+        <Snackbar
+          open={this.state.snackBar}
+          onClose={this.toggleSnack}
+          TransitionComponent={TransitionUp}
+          autoHideDuration={6000}
+        >
+          <Alert severity="success" variant="filled" onClose={this.toggleSnack}>
+            {this.state.msg}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  user: state.auth.user
+  user: state.auth.user,
+  application: state.application
 });
 
-export default connect(mapStateToProps, { editUser, deleteUser })(Account);
+export default connect(mapStateToProps, {
+  editUser,
+  deleteUser,
+  deleteAllApplications
+})(Account);

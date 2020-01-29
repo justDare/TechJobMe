@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import AppNavbar from '../components/AppNavbar';
 import JobApplications from '../components/JobApplications';
 import ApplicationModal from '../components/ApplicationModal';
-import { Container, Button, Alert } from 'reactstrap';
+import { Container, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  deleteAllApplications,
-  clearApplications
-} from '../actions/applicationActions';
+import { clearApplications } from '../actions/applicationActions';
 import PromptModal from './PromptModal';
 import store from '../store';
 import { loadUser, logout } from '../actions/authActions';
@@ -33,18 +30,28 @@ import HomeTwoToneIcon from '@material-ui/icons/HomeTwoTone';
 import AccountCircleTwoToneIcon from '@material-ui/icons/AccountCircleTwoTone';
 import ExitToAppTwoToneIcon from '@material-ui/icons/ExitToAppTwoTone';
 import MenuIcon from '@material-ui/icons/Menu';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
+import Snackbar from '@material-ui/core/Snackbar';
+import Slide from '@material-ui/core/Slide';
+import { Alert } from '@material-ui/lab';
+
+const TransitionUp = props => {
+  return <Slide {...props} direction="up" />;
+};
 
 export class DashBoard extends Component {
   state = {
     promptModal: false,
     msg: null,
-    mobileOpen: false
+    mobileOpen: false,
+    backdrop: true,
+    snackBar: false
   };
 
   static propTypes = {
     application: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    deleteAllApplications: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     clearApplications: PropTypes.func.isRequired
   };
@@ -58,14 +65,13 @@ export class DashBoard extends Component {
 
     // Alert when edit successful
     if (application !== prevProps.application) {
-      this.setState({
-        msg: application.msg
-      });
-      if (
-        application.msg === 'All applications deleted successfully!' &&
-        this.state.promptModal
-      )
-        this.togglePrompt();
+      // Set applications loading
+      if (!this.props.application.loading && this.state.backdrop)
+        this.toggleBackdrop();
+      if (this.props.application.msg !== prevProps.application.msg) {
+        this.setState({ msg: this.props.application.msg });
+        this.toggleSnack();
+      }
     }
   }
 
@@ -87,6 +93,16 @@ export class DashBoard extends Component {
   togglePrompt = () => {
     this.setState({
       promptModal: !this.state.promptModal
+    });
+  };
+
+  toggleBackdrop = () => {
+    this.setState({ backdrop: !this.state.backdrop });
+  };
+
+  toggleSnack = () => {
+    this.setState({
+      snackBar: !this.state.snackBar
     });
   };
 
@@ -132,18 +148,19 @@ export class DashBoard extends Component {
 
     return (
       <div className="d-flex">
-        {/* <AppNavbar /> */}
         <AppBar position="fixed" className="app-bar">
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={this.handleDrawerToggle}
-              className=""
-            >
-              <MenuIcon />
-            </IconButton>
+            <Hidden smUp implementation="css">
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={this.handleDrawerToggle}
+                className=""
+              >
+                <MenuIcon />
+              </IconButton>
+            </Hidden>
             <Typography variant="h6" noWrap>
               TechJobMe
             </Typography>
@@ -170,10 +187,27 @@ export class DashBoard extends Component {
             </Drawer>
           </Hidden>
         </nav>
-        <Container className="content">
-          {this.state.msg ? (
-            <Alert color="success">{this.state.msg}</Alert>
-          ) : null}
+        <Container className="content position-relative">
+          <Backdrop
+            open={this.state.backdrop}
+            className="position-absolute dash-loading"
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+          <Snackbar
+            open={this.state.snackBar}
+            onClose={this.toggleSnack}
+            TransitionComponent={TransitionUp}
+            autoHideDuration={6000}
+          >
+            <Alert
+              severity="success"
+              variant="filled"
+              onClose={this.toggleSnack}
+            >
+              {this.state.msg}
+            </Alert>
+          </Snackbar>
           <Switch>
             <Route exact path="/dashboard">
               <JobApplications />
@@ -186,8 +220,6 @@ export class DashBoard extends Component {
               render={props => <Application {...props} />}
             />
           </Switch>
-
-          {/* <JobApplications /> */}
         </Container>
       </div>
     );
@@ -200,7 +232,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-  deleteAllApplications,
   logout,
   clearApplications
 })(DashBoard);

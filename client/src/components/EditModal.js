@@ -3,26 +3,48 @@ import { editUser } from '../actions/authActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-  Button,
   Modal,
   ModalHeader,
   ModalBody,
   Form,
   FormGroup,
   Label,
-  Input,
-  Alert
+  Input
 } from 'reactstrap';
 import './modal.scss';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { formatDateString } from '../utilities/helperFunctions';
+
+// Material
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
+import { Alert } from '@material-ui/lab';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from '@material-ui/pickers';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export class EditModal extends Component {
   state = {
     fieldInput: '',
     passwordCheck: '',
     msg: null,
-    date: new Date()
+    date: null
   };
 
   static propTypes = {
@@ -30,6 +52,16 @@ export class EditModal extends Component {
     user: PropTypes.object.isRequired,
     editUser: PropTypes.func.isRequired
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.editField === 'date' && state.date === null) {
+      console.log(props.current);
+      return {
+        date: props.current
+      };
+    }
+    return null;
+  }
 
   componentDidUpdate(prevProps) {
     const { error, stateToUpdate } = this.props;
@@ -43,7 +75,7 @@ export class EditModal extends Component {
 
   setDate = pDate => {
     this.setState({
-      fieldInput: pDate
+      date: pDate
     });
   };
 
@@ -55,7 +87,7 @@ export class EditModal extends Component {
     e.preventDefault();
 
     const { editField, stateToUpdate } = this.props;
-    const { fieldInput, passwordCheck } = this.state;
+    const { fieldInput, passwordCheck, date } = this.state;
 
     // Create user edit payload
     const payload = {};
@@ -67,7 +99,8 @@ export class EditModal extends Component {
       return;
     }
 
-    payload['field'] = [editField, fieldInput];
+    if (editField === 'date') payload['field'] = [editField, date];
+    else payload['field'] = [editField, fieldInput];
     payload['_id'] = stateToUpdate._id;
 
     // Attempt to edit
@@ -78,40 +111,58 @@ export class EditModal extends Component {
   getInputJSX = (pEditFieldUI, pCurrent, type = 'input') => {
     if (this.props.editField === 'stage') {
       return (
-        <Input type="select" onChange={this.onChange} required>
-          <option value="">Select Application Stage</option>
-          <option>Application Sent</option>
-          <option>No Offer</option>
-          <option>Phone Screen</option>
-          <option>On-Site</option>
-          <option>Offer</option>
-        </Input>
+        <FormControl margin="dense" className="mt-3" fullWidth>
+          <Select
+            name="stage"
+            value={this.state.fieldInput}
+            onChange={this.onChange}
+            displayEmpty
+            required
+            autoWidth
+          >
+            <MenuItem value="" disabled>
+              Application stage
+            </MenuItem>
+            <MenuItem value="Application Sent">Application Sent</MenuItem>
+            <MenuItem value="No Offer">No Offer</MenuItem>
+            <MenuItem value="Phone Screen">Phone Screen</MenuItem>
+            <MenuItem value="On-Site">On-Site</MenuItem>
+            <MenuItem value="Offer">Offer</MenuItem>
+          </Select>
+        </FormControl>
       );
     } else if (this.props.editField === 'date') {
+      console.log(this.props);
+      console.log(this.state);
+      console.log(formatDateString(this.props.current));
       return (
-        <DatePicker
-          selected={Date.parse(this.props.stateToUpdate.date)}
-          onChange={date => this.setDate(Date.parse(date))}
-          showTimeSelect
-          timeFormat="HH:mm"
-          timeIntervals={15}
-          timeCaption="time"
-          todayButton="Today"
-          dateFormat="MMMM d, yyyy h:mm aa"
-          shouldCloseOnSelect={true}
-        />
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="MM/dd/yyyy"
+            margin="dense"
+            label="Select a date"
+            value={this.state.date}
+            onChange={this.setDate}
+            KeyboardButtonProps={{
+              'aria-label': 'change date'
+            }}
+          />
+        </MuiPickersUtilsProvider>
       );
     } else {
       return (
         <Fragment>
-          <Label for="application">{pEditFieldUI}</Label>
-          <Input
-            type="text"
-            placeholder={pEditFieldUI}
-            className="mb-3"
-            onChange={this.onChange}
+          <TextField
+            autoFocus
+            margin="dense"
+            label={pEditFieldUI}
             defaultValue={pCurrent}
+            type="text"
+            onChange={this.onChange}
             required
+            fullWidth
           />
         </Fragment>
       );
@@ -129,39 +180,47 @@ export class EditModal extends Component {
     if (editField === 'password') {
       validateInput = (
         <Fragment>
-          <Label for="name">Re-Type Password</Label>
-          <Input
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Re-Type Password"
             type="text"
-            name="passwordCheck"
-            placeholder="Re-Type Password"
-            className="mb-3"
             onChange={this.onChange}
             required
+            fullWidth
           />
         </Fragment>
       );
     }
 
     return (
-      <Modal isOpen={modal} toggle={() => this.props.toggle()}>
-        <ModalHeader toggle={() => this.props.toggle()}>
-          Edit {editFieldUI}
-        </ModalHeader>
-        <ModalBody>
+      <Dialog
+        open={modal}
+        onClose={this.props.toggle}
+        aria-labelledby="form-dialog-title"
+        TransitionComponent={Transition}
+        maxWidth="sm"
+        fullWidth={true}
+      >
+        <DialogTitle id="form-dialog-title">Edit {editFieldUI}</DialogTitle>
+        <DialogContent>
           {this.state.msg ? (
             <Alert color="danger">{this.state.msg}</Alert>
           ) : null}
-          <Form onSubmit={this.onSubmit}>
-            <FormGroup>
-              {input}
-              {validateInput}
-              <Button color="dark" style={{ marginTop: '2rem' }} block>
+          <form onSubmit={this.onSubmit}>
+            {input}
+            {validateInput}
+            <div className="text-right mt-4">
+              <Button onClick={this.props.toggle} color="primary">
+                Cancel
+              </Button>
+              <Button type="submit" color="primary">
                 Submit Changes
               </Button>
-            </FormGroup>
-          </Form>
-        </ModalBody>
-      </Modal>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     );
   }
 }

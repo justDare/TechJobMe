@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Alert,
-  ModalFooter
-} from 'reactstrap';
 
-// Props Required: action, toggle, title, body, cancel, confirm
+// Material
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
+import { Alert } from '@material-ui/lab';
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+// Props Required: action, toggle, title, body
 export default class PromptModal extends Component {
   state = {
     modal: false,
@@ -24,30 +29,30 @@ export default class PromptModal extends Component {
   render() {
     return (
       <div>
-        <Modal isOpen={this.props.modal} toggle={this.props.toggle}>
-          <ModalHeader toggle={this.props.toggle}>
-            {this.props.title}
-          </ModalHeader>
-          <ModalBody>
-            {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
-            ) : null}
-            {this.props.body}
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              color="dark"
-              style={{ marginTop: '2rem' }}
-              onClick={this.props.toggle}
-              block
-            >
-              {this.props.cancel}
-            </Button>
-            <Button color="danger" onClick={this.modalAction} block>
-              {this.props.confirm}
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <Dialog
+          open={this.props.modal}
+          onClose={this.props.toggle}
+          aria-labelledby="form-dialog-title"
+          TransitionComponent={Transition}
+        >
+          <DialogTitle id="form-dialog-title">{this.props.title}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {this.state.msg ? (
+                <Alert color="danger">{this.state.msg}</Alert>
+              ) : null}
+              {this.props.body}
+            </DialogContentText>
+            <div className="text-right mt-4">
+              <Button onClick={this.props.toggle} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={this.modalAction} color="secondary">
+                Delete
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }

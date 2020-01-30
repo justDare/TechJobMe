@@ -52,7 +52,7 @@ export class Application extends Component {
     }
   }
 
-  toggle = (editField, current) => {
+  toggle = (editField = '', current = '') => {
     this.setState({
       modal: !this.state.modal,
       editField: editField,
@@ -114,8 +114,10 @@ export class Application extends Component {
     const fields = this.getFields();
     const { modal, editField, current } = this.state;
 
+    console.log(this.state);
+
     let editFieldUI = '';
-    if (editField)
+    if (editField.length)
       editFieldUI = editField.charAt(0).toUpperCase() + editField.substring(1);
 
     return (

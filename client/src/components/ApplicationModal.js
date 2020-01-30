@@ -22,7 +22,6 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -33,6 +32,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 class ApplicationModal extends Component {
   state = {
@@ -117,6 +121,7 @@ class ApplicationModal extends Component {
           open={this.state.dialog}
           onClose={this.toggleDialog}
           aria-labelledby="form-dialog-title"
+          TransitionComponent={Transition}
         >
           <DialogTitle id="form-dialog-title">Add Application</DialogTitle>
           <DialogContent>

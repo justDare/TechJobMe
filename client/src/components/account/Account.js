@@ -122,7 +122,7 @@ export class Account extends Component {
     const { modal, promptModal, editField, current } = this.state;
 
     let editFieldUI = '';
-    if (editField)
+    if (editField.length)
       editFieldUI = editField.charAt(0).toUpperCase() + editField.substring(1);
 
     return (
@@ -249,8 +249,6 @@ export class Account extends Component {
           modal={promptModal}
           title="Delete User Account"
           body="Are you sure you wish to delete your account? All of your data will be gone forever."
-          cancel="Cancel"
-          confirm="Delete my account"
         />
         <PromptModal
           modalAction={this.deleteAllApplications}
@@ -258,8 +256,6 @@ export class Account extends Component {
           modal={this.state.promptModalApps}
           title="Delete All Applications"
           body="Are you sure you wish to delete all of your applications? All of them will be gone forever."
-          cancel="No, I like them"
-          confirm="Yes, delete all of my applications"
         />
         <Snackbar
           open={this.state.snackBar}

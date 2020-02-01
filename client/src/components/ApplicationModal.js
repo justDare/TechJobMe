@@ -21,6 +21,7 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -36,7 +37,8 @@ class ApplicationModal extends Component {
     contact: '',
     stage: '',
     date: new Date(),
-    msg: null
+    msg: null,
+    stageError: false
   };
 
   componentDidUpdate(prevProps) {
@@ -71,6 +73,7 @@ class ApplicationModal extends Component {
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    if (e.target.name === 'stage') this.setState({ stageError: false });
   };
 
   setDate = pDate => {
@@ -81,6 +84,11 @@ class ApplicationModal extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+
+    if (this.state.stage === '') {
+      this.setState({ stageError: true });
+      return;
+    }
 
     const newApplication = {
       name: this.state.name,
@@ -152,7 +160,12 @@ class ApplicationModal extends Component {
                 onChange={this.onChange}
                 fullWidth
               />
-              <FormControl margin="dense" className="mt-3" fullWidth>
+              <FormControl
+                margin="dense"
+                className="mt-3"
+                fullWidth
+                error={this.state.stageError}
+              >
                 <Select
                   name="stage"
                   value={this.state.stage}
@@ -170,6 +183,9 @@ class ApplicationModal extends Component {
                   <MenuItem value="On-Site">On-Site</MenuItem>
                   <MenuItem value="Offer">Offer</MenuItem>
                 </Select>
+                {this.state.stageError ? (
+                  <FormHelperText>This is required!</FormHelperText>
+                ) : null}
               </FormControl>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker

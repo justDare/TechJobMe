@@ -72,7 +72,7 @@ export class Account extends Component {
     }
   }
 
-  toggle = (editField, current) => {
+  toggle = (editField = '', current = '') => {
     this.setState({
       modal: !this.state.modal,
       editField: editField,
@@ -98,6 +98,7 @@ export class Account extends Component {
 
   deleteAllApplications = () => {
     this.props.deleteAllApplications(this.props.user._id);
+    this.togglePromptApps();
   };
 
   toggleSnack = () => {
@@ -154,7 +155,7 @@ export class Account extends Component {
               item
               xs={12}
               className="grid-item"
-              onClick={() => this.toggle('name', user.email)}
+              onClick={() => this.toggle('email', user.email)}
             >
               <Grid container spacing={1}>
                 <Grid item xs={4} className="align-items-center d-flex pl-4">

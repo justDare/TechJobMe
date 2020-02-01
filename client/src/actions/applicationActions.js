@@ -7,7 +7,8 @@ import {
   APPLICATIONS_LOADING,
   CLEAR_APPLICATIONS,
   EDIT_APPLICATION,
-  DELETE_ALL
+  DELETE_ALL,
+  CLEAR_APPLICATION_MSG
 } from './types';
 import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
@@ -99,5 +100,11 @@ export const setApplicationsLoading = () => {
 export const clearApplications = () => {
   return {
     type: CLEAR_APPLICATIONS
+  };
+};
+
+export const clearApplicationMsg = () => {
+  return {
+    type: CLEAR_APPLICATION_MSG
   };
 };

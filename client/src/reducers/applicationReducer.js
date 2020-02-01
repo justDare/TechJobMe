@@ -1,6 +1,7 @@
 import {
   GET_APPLICATIONS,
   CLEAR_APPLICATIONS,
+  CLEAR_APPLICATION_MSG,
   ADD_APPLICATION,
   ADD_APPLICATION_FAIL,
   DELETE_APPLICATION,
@@ -32,6 +33,11 @@ export default function(state = initialState, action) {
         ...state,
         applications: [],
         loading: false
+      };
+    case CLEAR_APPLICATION_MSG:
+      return {
+        ...state,
+        msg: null
       };
     case DELETE_APPLICATION:
       return {

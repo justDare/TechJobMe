@@ -3,7 +3,10 @@ import JobApplications from '../components/JobApplications';
 import ApplicationModal from '../components/ApplicationModal';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { clearApplications } from '../actions/applicationActions';
+import {
+  clearApplications,
+  clearApplicationMsg
+} from '../actions/applicationActions';
 import store from '../store';
 import { loadUser, logout } from '../actions/authActions';
 import { Route, Switch, Link } from 'react-router-dom';
@@ -51,7 +54,8 @@ export class DashBoard extends Component {
     application: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
-    clearApplications: PropTypes.func.isRequired
+    clearApplications: PropTypes.func.isRequired,
+    clearApplicationMsg: PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -59,16 +63,20 @@ export class DashBoard extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const application = this.props.application;
+    const { application, clearApplicationMsg } = this.props;
 
     // Alert when edit successful
     if (application !== prevProps.application) {
       // Set applications loading
       if (!this.props.application.loading && this.state.backdrop)
         this.toggleBackdrop();
-      if (this.props.application.msg !== prevProps.application.msg) {
+      if (
+        this.props.application.msg !== prevProps.application.msg &&
+        this.props.application.msg !== null
+      ) {
         this.setState({ msg: this.props.application.msg });
         this.toggleSnack();
+        clearApplicationMsg();
       }
     }
   }
@@ -230,5 +238,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   logout,
-  clearApplications
+  clearApplications,
+  clearApplicationMsg
 })(DashBoard);

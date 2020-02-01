@@ -1,18 +1,7 @@
 import React, { Component } from 'react';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Alert
-} from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addApplication } from '../actions/applicationActions';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // Material
@@ -20,7 +9,6 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DateFnsUtils from '@date-io/date-fns';
@@ -208,85 +196,6 @@ class ApplicationModal extends Component {
             </form>
           </DialogContent>
         </Dialog>
-
-        <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Add Application</ModalHeader>
-          <ModalBody>
-            {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
-            ) : null}
-            <Form onSubmit={this.onSubmit}>
-              <FormGroup>
-                <Label for="application">Application</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  placeholder="Company Name"
-                  className="mb-3"
-                  onChange={this.onChange}
-                  required
-                />
-                <Label for="position">Position</Label>
-                <Input
-                  type="text"
-                  name="position"
-                  placeholder="Position"
-                  className="mb-3"
-                  onChange={this.onChange}
-                  required
-                />
-                <Label for="application">Posting Link</Label>
-                <Input
-                  type="text"
-                  name="link"
-                  placeholder="Job Posting URL"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-                <Label for="contact">Contact Email</Label>
-                <Input
-                  type="text"
-                  name="contact"
-                  placeholder="Recruiter Contact Email"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-                <Label for="selectStage">Application Stage</Label>
-                <Input
-                  type="select"
-                  name="stage"
-                  className="mb-3"
-                  onChange={this.onChange}
-                  required
-                >
-                  <option value="">Select Application Stage</option>
-                  <option>Application Sent</option>
-                  <option>No Offer</option>
-                  <option>Phone Screen</option>
-                  <option>On-Site</option>
-                  <option>Offer</option>
-                </Input>
-                <Label for="date" className="d-block">
-                  Select Date
-                </Label>
-                <DatePicker
-                  selected={this.state.date}
-                  onChange={date => this.setDate(date)}
-                  showTimeSelect
-                  timeFormat="HH:mm"
-                  timeIntervals={15}
-                  timeCaption="time"
-                  dateFormat="MMMM d, yyyy h:mm aa"
-                  todayButton="Today"
-                  shouldCloseOnSelect={true}
-                />
-                <Button color="dark" style={{ marginTop: '2rem' }} block>
-                  Add Application
-                </Button>
-              </FormGroup>
-            </Form>
-          </ModalBody>
-        </Modal>
       </div>
     );
   }

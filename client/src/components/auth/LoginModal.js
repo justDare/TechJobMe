@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Form, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/authActions';
@@ -17,7 +16,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import { Alert } from '@material-ui/lab';
 import Slide from '@material-ui/core/Slide';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -95,66 +93,62 @@ class LoginModal extends Component {
     return (
       <div>
         <h1 className="text-center mb-5">TechJobMe</h1>
-        <Form onSubmit={this.onSubmit}>
-          <FormGroup>
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="outlined-adornment-password">
-                Email
-              </InputLabel>
-              <OutlinedInput
-                name="email"
-                onChange={this.onChange}
-                className="mb-3"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <AccountCircle
-                      aria-label="toggle password visibility"
-                      edge="end"
-                    ></AccountCircle>
-                  </InputAdornment>
-                }
-                labelWidth={40}
-              />
-            </FormControl>
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                type={this.state.showPassword ? 'text' : 'password'}
-                onChange={this.onChange}
-                name="password"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={this.handleClickShowPassword}
-                      edge="end"
-                    >
-                      {this.state.showPassword ? (
-                        <Visibility />
-                      ) : (
-                        <VisibilityOff />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                labelWidth={70}
-              />
-            </FormControl>
-            <div className="w-100 mt-5 d-flex login-form-footer">
-              <ForgotPasswordModal />
-              <Button
-                variant="contained"
-                className="w-50"
-                color="primary"
-                type="submit"
-              >
-                Login
-              </Button>
-            </div>
-          </FormGroup>
-        </Form>
+        <form onSubmit={this.onSubmit}>
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
+            <OutlinedInput
+              name="email"
+              onChange={this.onChange}
+              className="mb-3"
+              endAdornment={
+                <InputAdornment position="end">
+                  <AccountCircle
+                    aria-label="toggle password visibility"
+                    edge="end"
+                  ></AccountCircle>
+                </InputAdornment>
+              }
+              labelWidth={40}
+            />
+          </FormControl>
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel htmlFor="outlined-adornment-password">
+              Password
+            </InputLabel>
+            <OutlinedInput
+              type={this.state.showPassword ? 'text' : 'password'}
+              onChange={this.onChange}
+              name="password"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={this.handleClickShowPassword}
+                    edge="end"
+                  >
+                    {this.state.showPassword ? (
+                      <Visibility />
+                    ) : (
+                      <VisibilityOff />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              }
+              labelWidth={70}
+            />
+          </FormControl>
+          <div className="w-100 mt-5 d-flex login-form-footer">
+            <ForgotPasswordModal />
+            <Button
+              variant="contained"
+              className="w-50"
+              color="primary"
+              type="submit"
+            >
+              Login
+            </Button>
+          </div>
+        </form>
         <Snackbar
           open={this.state.snackBar}
           onClose={this.toggleSnack}

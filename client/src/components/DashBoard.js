@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import AppNavbar from '../components/AppNavbar';
 import JobApplications from '../components/JobApplications';
 import ApplicationModal from '../components/ApplicationModal';
-import { Container, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { clearApplications } from '../actions/applicationActions';
-import PromptModal from './PromptModal';
 import store from '../store';
 import { loadUser, logout } from '../actions/authActions';
 import { Route, Switch, Link } from 'react-router-dom';
@@ -35,6 +32,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 import { Alert } from '@material-ui/lab';
+import Container from '@material-ui/core/Container';
 
 const TransitionUp = props => {
   return <Slide {...props} direction="up" />;
@@ -144,7 +142,6 @@ export class DashBoard extends Component {
 
   render() {
     const drawer = this.getDrawer();
-    const path = this.props.match;
 
     return (
       <div className="d-flex">

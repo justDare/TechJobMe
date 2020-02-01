@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Container, Button, Alert } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
-import { MdEdit } from 'react-icons/md';
 import EditModal from '../components/EditModal';
 import { editApplication } from '../actions/applicationActions';
 import { formatDateString } from '../utilities/helperFunctions';
@@ -13,9 +11,6 @@ import { loadUser } from '../actions/authActions';
 import './JobApplications.scss';
 
 // Material
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -23,13 +18,21 @@ import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import Snackbar from '@material-ui/core/Snackbar';
+import Slide from '@material-ui/core/Slide';
+import { Alert } from '@material-ui/lab';
+
+const TransitionUp = props => {
+  return <Slide {...props} direction="up" />;
+};
 
 export class Application extends Component {
   state = {
     modal: false,
     editField: '',
     current: '',
-    msg: ''
+    msg: '',
+    snackBar: false
   };
 
   componentDidMount() {
@@ -47,6 +50,7 @@ export class Application extends Component {
           this.setState({
             msg: `${fieldUI} updated successfully!`
           });
+          this.toggleSnack();
         }
       }
     }
@@ -57,6 +61,12 @@ export class Application extends Component {
       modal: !this.state.modal,
       editField: editField,
       current: current
+    });
+  };
+
+  toggleSnack = () => {
+    this.setState({
+      snackBar: !this.state.snackBar
     });
   };
 
@@ -71,6 +81,7 @@ export class Application extends Component {
       user_id: true
     };
 
+    let keyCount = 0;
     for (let field in application) {
       if (!nonUIFields[field]) {
         let fieldHeadingUI = field.charAt(0).toUpperCase() + field.substring(1);
@@ -86,10 +97,16 @@ export class Application extends Component {
             item
             xs={12}
             className="grid-item"
+            key={`outer-${application._id}-${keyCount}`}
             onClick={() => this.toggle(field, application[field])}
           >
             <Grid container spacing={1}>
-              <Grid item xs={4} className="align-items-center d-flex pl-4">
+              <Grid
+                key={`inner-${application._id}`}
+                item
+                xs={4}
+                className="align-items-center d-flex pl-4"
+              >
                 <Typography variant="overline">{fieldHeadingUI}</Typography>
               </Grid>
               <Grid item xs={7} className="align-items-center d-flex">
@@ -104,6 +121,7 @@ export class Application extends Component {
           </Grid>
         );
       }
+      keyCount++;
     }
 
     return fields;
@@ -113,8 +131,6 @@ export class Application extends Component {
     const application = this.props.application;
     const fields = this.getFields();
     const { modal, editField, current } = this.state;
-
-    console.log(this.state);
 
     let editFieldUI = '';
     if (editField.length)
@@ -140,12 +156,19 @@ export class Application extends Component {
             <Typography variant="h6">{application.name} Application</Typography>
           </Toolbar>
           <Grid container spacing={1} className="grid-main">
-            {this.state.msg ? (
-              <Alert color="success">{this.state.msg}</Alert>
-            ) : null}
             {fields}
           </Grid>
         </Paper>
+        <Snackbar
+          open={this.state.snackBar}
+          onClose={this.toggleSnack}
+          TransitionComponent={TransitionUp}
+          autoHideDuration={6000}
+        >
+          <Alert severity="success" variant="filled" onClose={this.toggleSnack}>
+            {this.state.msg}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

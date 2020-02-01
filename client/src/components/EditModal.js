@@ -2,25 +2,12 @@ import React, { Component, Fragment } from 'react';
 import { editUser } from '../actions/authActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Form,
-  FormGroup,
-  Label,
-  Input
-} from 'reactstrap';
 import './modal.scss';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { formatDateString } from '../utilities/helperFunctions';
 
 // Material
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Slide from '@material-ui/core/Slide';
@@ -55,7 +42,6 @@ export class EditModal extends Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.editField === 'date' && state.date === null) {
-      console.log(props.current);
       return {
         date: props.current
       };
@@ -132,9 +118,6 @@ export class EditModal extends Component {
         </FormControl>
       );
     } else if (this.props.editField === 'date') {
-      console.log(this.props);
-      console.log(this.state);
-      console.log(formatDateString(this.props.current));
       return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <KeyboardDatePicker

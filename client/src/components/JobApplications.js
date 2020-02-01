@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Row, Col, Button } from 'reactstrap';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import {
   getApplications,
   deleteApplication,
@@ -57,8 +56,6 @@ class JobApplications extends Component {
   };
 
   render() {
-    const { applications } = this.props.application;
-
     // sent: "yellow" , reject: "red", phone-screen: "purple" , onsite: "blue" , offer: "green"
     const statusColors = {
       'Application Sent': 'yellow',

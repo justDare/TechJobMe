@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import AppNavbar from '../AppNavbar';
-import { Link } from 'react-router-dom';
-import { MdEdit } from 'react-icons/md';
-import {
-  ListGroup,
-  ListGroupItem,
-  ListGroupItemHeading,
-  ListGroupItemText
-} from 'reactstrap';
 import EditModal from '../EditModal';
 import { editUser, deleteUser } from '../../actions/authActions';
 import PromptModal from '../PromptModal';
@@ -19,11 +10,9 @@ import { deleteAllApplications } from '../../actions/applicationActions';
 
 // Material
 import Paper from '@material-ui/core/Paper';
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { Alert, AlertTitle } from '@material-ui/lab';

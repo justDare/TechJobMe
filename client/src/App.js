@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import store from './store';
 import DashBoard from './components/DashBoard';
 import LoginLanding from './components/auth/LoginLanding';
-import Application from './components/Application';
-import Account from './components/account/Account';
 import { Provider } from 'react-redux';
 import PrivateRoute from './components/auth/PrivateRoute';
 import PasswordReset from './components/auth/ResetPassword';

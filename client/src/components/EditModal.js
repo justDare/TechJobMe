@@ -3,7 +3,6 @@ import { editUser } from '../actions/authActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import './modal.scss';
-import 'react-datepicker/dist/react-datepicker.css';
 
 // Material
 import Dialog from '@material-ui/core/Dialog';

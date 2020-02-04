@@ -1,25 +1,8 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  NavLink,
-  Alert
-} from 'reactstrap';
-=======
->>>>>>> dev
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { register } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
-<<<<<<< HEAD
-=======
 import { Redirect } from 'react-router-dom';
 import './Login.scss';
 
@@ -52,7 +35,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const TransitionUp = props => {
   return <Slide {...props} direction="up" />;
 };
->>>>>>> dev
 
 class RegisterModal extends Component {
   state = {
@@ -60,15 +42,11 @@ class RegisterModal extends Component {
     name: '',
     email: '',
     password: '',
-<<<<<<< HEAD
-    msg: null
-=======
     passwordCheck: '',
     showPassword: false,
     showCheck: false,
     msg: null,
     snackBar: false
->>>>>>> dev
   };
 
   static propTypes = {
@@ -84,24 +62,15 @@ class RegisterModal extends Component {
       // Check for register error
       if (error.id === 'REGISTER_FAIL') {
         this.setState({ msg: error.msg.msg });
-<<<<<<< HEAD
-=======
         this.toggleSnack();
->>>>>>> dev
       } else {
         this.setState({ msg: null });
       }
     }
 
-<<<<<<< HEAD
-    // If authenticated, close modal
-    if (this.state.modal && isAuthenticated) {
-      this.toggle();
-=======
     // If authenticated, redirect to dashboard
     if (this.state.modal && isAuthenticated) {
       return <Redirect to="/dashboard" />;
->>>>>>> dev
     }
   }
 
@@ -113,25 +82,16 @@ class RegisterModal extends Component {
     });
   };
 
-<<<<<<< HEAD
-=======
   toggleSnack = () => {
     this.setState({
       snackBar: !this.state.snackBar
     });
   };
 
->>>>>>> dev
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-<<<<<<< HEAD
-  onSubmit = e => {
-    e.preventDefault();
-
-    const { name, email, password } = this.state;
-=======
   handleClickShowPassword = () => {
     this.setState({
       showPassword: !this.state.showPassword
@@ -154,18 +114,13 @@ class RegisterModal extends Component {
       this.toggleSnack();
       return;
     }
->>>>>>> dev
 
     // Create user object
     const newUser = {
       name,
       email,
-<<<<<<< HEAD
-      password
-=======
       password,
       passwordCheck
->>>>>>> dev
     };
 
     // Attempt to register
@@ -174,57 +129,6 @@ class RegisterModal extends Component {
 
   render() {
     return (
-<<<<<<< HEAD
-      <div>
-        <NavLink onClick={this.toggle} href="#">
-          Register
-        </NavLink>
-
-        <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Register</ModalHeader>
-          <ModalBody>
-            {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
-            ) : null}
-            <Form onSubmit={this.onSubmit}>
-              <FormGroup>
-                <Label for="name">Name</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Name"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-
-                <Label for="name">Email</Label>
-                <Input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Email"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-
-                <Label for="name">Password</Label>
-                <Input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Password"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-                <Button color="dark" style={{ marginTop: '2rem' }} block>
-                  Register
-                </Button>
-              </FormGroup>
-            </Form>
-          </ModalBody>
-        </Modal>
-=======
       <div className="text-center mt-5">
         <div>
           <Typography variant="caption" display="block" gutterBottom>
@@ -363,7 +267,6 @@ class RegisterModal extends Component {
             {this.state.msg}
           </Alert>
         </Snackbar>
->>>>>>> dev
       </div>
     );
   }

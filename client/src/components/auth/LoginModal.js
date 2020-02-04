@@ -1,25 +1,8 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  NavLink,
-  Alert
-} from 'reactstrap';
-=======
->>>>>>> dev
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
-<<<<<<< HEAD
-=======
 import { Redirect } from 'react-router-dom';
 import ForgotPasswordModal from './ForgotPasswordModal';
 
@@ -40,20 +23,15 @@ import Snackbar from '@material-ui/core/Snackbar';
 const TransitionUp = props => {
   return <Slide {...props} direction="up" />;
 };
->>>>>>> dev
 
 class LoginModal extends Component {
   state = {
     modal: false,
     email: '',
     password: '',
-<<<<<<< HEAD
-    msg: null
-=======
     showPassword: false,
     msg: null,
     snackBar: false
->>>>>>> dev
   };
 
   static propTypes = {
@@ -64,43 +42,21 @@ class LoginModal extends Component {
   };
 
   componentDidUpdate(prevProps) {
-<<<<<<< HEAD
-    const { error, isAuthenticated } = this.props;
-=======
     const { error } = this.props;
->>>>>>> dev
     if (error !== prevProps.error) {
       // Check for register error
       if (error.id === 'LOGIN_FAIL') {
         this.setState({ msg: error.msg.msg });
-<<<<<<< HEAD
-=======
         this.toggleSnack();
->>>>>>> dev
       } else {
         this.setState({ msg: null });
       }
     }
-<<<<<<< HEAD
-
-    // If authenticated, close modal
-    if (this.state.modal && isAuthenticated) {
-      this.toggle();
-    }
-  }
-
-  toggle = () => {
-    // Clear errors
-    this.props.clearErrors();
-    this.setState({
-      modal: !this.state.modal
-=======
   }
 
   toggleSnack = () => {
     this.setState({
       snackBar: !this.state.snackBar
->>>>>>> dev
     });
   };
 
@@ -108,15 +64,12 @@ class LoginModal extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-<<<<<<< HEAD
-=======
   handleClickShowPassword = () => {
     this.setState({
       showPassword: !this.state.showPassword
     });
   };
 
->>>>>>> dev
   onSubmit = e => {
     e.preventDefault();
 
@@ -132,48 +85,6 @@ class LoginModal extends Component {
   };
 
   render() {
-<<<<<<< HEAD
-    return (
-      <div>
-        <NavLink onClick={this.toggle} href="#">
-          Login
-        </NavLink>
-
-        <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Login</ModalHeader>
-          <ModalBody>
-            {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
-            ) : null}
-            <Form onSubmit={this.onSubmit}>
-              <FormGroup>
-                <Label for="name">Email</Label>
-                <Input
-                  type="email"
-                  name="email"
-                  id="email"
-                  placeholder="Email"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-
-                <Label for="name">Password</Label>
-                <Input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Password"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-                <Button color="dark" style={{ marginTop: '2rem' }} block>
-                  Login
-                </Button>
-              </FormGroup>
-            </Form>
-          </ModalBody>
-        </Modal>
-=======
     const { isAuthenticated } = this.props;
 
     // If authenticated, redirect to dashboard
@@ -248,7 +159,6 @@ class LoginModal extends Component {
             {this.state.msg}
           </Alert>
         </Snackbar>
->>>>>>> dev
       </div>
     );
   }

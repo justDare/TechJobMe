@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const auth = require("../../middleware/auth");
-
-// JWT Config
-const jwtSecret = process.env.JWT || require("../../config/keys").jwt;
-
-// Application Model
-const User = require("../../models/User");
-=======
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
@@ -23,44 +10,27 @@ const jwtSecret = process.env.JWT || require('../../config/keys').jwt;
 
 // Application Model
 const User = require('../../models/User');
->>>>>>> dev
 
 // @route GET api/auth
 // @desc  Authenticate User
 // @access Public
-<<<<<<< HEAD
-router.post("/", (req, res) => {
-=======
 router.post('/', (req, res) => {
->>>>>>> dev
   const { email, password } = req.body;
 
   // Simple evalidation
   if (!email || !password) {
-<<<<<<< HEAD
-    return res.status(400).json({ msg: "Please enter all fields." });
-=======
     return res.status(400).json({ msg: 'Please enter all fields.' });
->>>>>>> dev
   }
 
   // Check for existing user
   User.findOne({ email }).then(user => {
     if (!user) {
-<<<<<<< HEAD
-      return res.status(400).json({ msg: "User does not exist." });
-=======
       return res.status(400).json({ msg: 'User does not exist.' });
->>>>>>> dev
     }
 
     // Validate Password
     bcrypt.compare(password, user.password).then(isMatch => {
-<<<<<<< HEAD
-      if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
-=======
       if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
->>>>>>> dev
 
       jwt.sign(
         { id: user.id },
@@ -71,11 +41,7 @@ router.post('/', (req, res) => {
           res.json({
             token,
             user: {
-<<<<<<< HEAD
-              id: user.id,
-=======
               _id: user.id,
->>>>>>> dev
               name: user.name,
               email: user.email
             }
@@ -89,14 +55,6 @@ router.post('/', (req, res) => {
 // @route GET api/auth/user
 // @desc  Get user data
 // @access Private
-<<<<<<< HEAD
-router.get("/user", auth, (req, res) => {
-  User.findById(req.user.id)
-    .select("-password")
-    .then(user => res.json(user));
-});
-
-=======
 router.get('/user', auth, (req, res) => {
   User.findById(req.user.id)
     .select('-password')
@@ -220,5 +178,4 @@ router.post('/update-password-via-email', (req, res) => {
   });
 });
 
->>>>>>> dev
 module.exports = router;

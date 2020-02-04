@@ -9,7 +9,7 @@ import {
 } from '../actions/applicationActions';
 import store from '../store';
 import { loadUser, logout } from '../actions/authActions';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, Redirect } from 'react-router-dom';
 import Account from './account/Account';
 import Application from './Application';
 import './Dashboard.scss';
@@ -149,6 +149,11 @@ export class DashBoard extends Component {
   };
 
   render() {
+    // if not authenticated, redirect to login
+    if (!this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
+
     const drawer = this.getDrawer();
 
     return (
@@ -233,7 +238,8 @@ export class DashBoard extends Component {
 
 const mapStateToProps = state => ({
   application: state.application,
-  user: state.auth.user
+  user: state.auth.user,
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStateToProps, {

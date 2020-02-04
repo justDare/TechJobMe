@@ -9,6 +9,11 @@
   .login-card {
     padding: 50px 30px 70px 30px;
 
+    .login-logo {
+      max-height: 175px;
+      max-width: 100%;
+    }
+
     input {
       background-color: transparent !important;
     }

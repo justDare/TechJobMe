@@ -5,6 +5,7 @@ import { login } from '../../actions/authActions';
 import { clearErrors } from '../../actions/errorActions';
 import { Redirect } from 'react-router-dom';
 import ForgotPasswordModal from './ForgotPasswordModal';
+import Logo from '../../media/logo-full.png';
 
 // Material
 import IconButton from '@material-ui/core/IconButton';
@@ -92,7 +93,9 @@ class LoginModal extends Component {
 
     return (
       <div>
-        <h1 className="text-center mb-5">TechJobMe</h1>
+        <div className="w-100 text-center mb-1">
+          <img className="login-logo" src={Logo} alt="TechJobMe logo" />
+        </div>
         <form onSubmit={this.onSubmit}>
           <FormControl variant="outlined" fullWidth>
             <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>

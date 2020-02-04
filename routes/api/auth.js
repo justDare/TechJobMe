@@ -111,7 +111,7 @@ router.post('/forgot-password', (req, res) => {
             }
           });
 
-          const url = `http://${req.headers['x-forwarded-host']}/forgot-password/${token}`;
+          const url = `http://damp-thicket-76216.herokuapp.com//forgot-password/${token}`;
 
           const mailOptions = {
             from: userEmail,

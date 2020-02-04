@@ -43,6 +43,10 @@ export class ForgotPasswordModal extends Component {
     clearAuthMessage: PropTypes.func.isRequired
   };
 
+  componentDidMount() {
+    this.props.clearAuthMessage();
+  }
+
   componentDidUpdate(prevProps) {
     const { error, auth } = this.props;
     if (error !== prevProps.error) {
@@ -55,7 +59,8 @@ export class ForgotPasswordModal extends Component {
       }
     }
     if (auth !== prevProps.auth) {
-      if (auth.msg === 'Recovery email sent!') this.toggle();
+      if (auth.msg === 'Recovery email sent!' && this.state.modal)
+        this.toggle();
     }
   }
 

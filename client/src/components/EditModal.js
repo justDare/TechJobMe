@@ -92,7 +92,7 @@ export class EditModal extends Component {
   };
 
   // Input may be single input or select
-  getInputJSX = (pEditFieldUI, pCurrent, type = 'input') => {
+  getInputJSX = (pEditFieldUI, pCurrent) => {
     if (this.props.editField === 'stage') {
       return (
         <FormControl margin="dense" className="mt-3" fullWidth>
@@ -101,7 +101,6 @@ export class EditModal extends Component {
             value={this.state.fieldInput}
             onChange={this.onChange}
             displayEmpty
-            required
             autoWidth
           >
             <MenuItem value="" disabled>
@@ -142,7 +141,6 @@ export class EditModal extends Component {
             defaultValue={pCurrent}
             type="text"
             onChange={this.onChange}
-            required
             fullWidth
           />
         </Fragment>
@@ -151,6 +149,7 @@ export class EditModal extends Component {
   };
 
   render() {
+    console.log(this.props);
     const { modal, editField, editFieldUI } = this.props;
     let current = '';
     if (editField !== 'password') current = this.props.current;

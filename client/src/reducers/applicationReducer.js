@@ -42,6 +42,7 @@ export default function(state = initialState, action) {
     case DELETE_APPLICATION:
       return {
         ...state,
+        msg: 'Application deleted!',
         applications: state.applications.filter(
           application => application._id !== action.payload
         )

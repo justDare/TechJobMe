@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import EditModal from '../components/EditModal';
-import { editApplication } from '../actions/applicationActions';
+import {
+  editApplication,
+  deleteApplication
+} from '../actions/applicationActions';
 import { formatDateString } from '../utilities/helperFunctions';
 import store from '../store';
 import { loadUser } from '../actions/authActions';
@@ -21,6 +24,8 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 import { Alert } from '@material-ui/lab';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const TransitionUp = props => {
   return <Slide {...props} direction="up" />;
@@ -32,11 +37,22 @@ export class Application extends Component {
     editField: '',
     current: '',
     msg: '',
-    snackBar: false
+    snackBar: false,
+    redirect: false
   };
 
   componentDidMount() {
     store.dispatch(loadUser());
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    // set redirect when application deleted
+    if (props.applicationMsg === 'Application deleted!') {
+      return {
+        redirect: true
+      };
+    }
+    return null;
   }
 
   componentDidUpdate(prevProps) {
@@ -68,6 +84,11 @@ export class Application extends Component {
     this.setState({
       snackBar: !this.state.snackBar
     });
+  };
+
+  deleteApplication = () => {
+    const id = this.props.match.params._id;
+    this.props.deleteApplication(id);
   };
 
   getFields = () => {
@@ -128,6 +149,8 @@ export class Application extends Component {
   };
 
   render() {
+    if (this.state.redirect) return <Redirect to="/dashboard" />;
+
     const application = this.props.application;
     const fields = this.getFields();
     const { modal, editField, current } = this.state;
@@ -152,8 +175,16 @@ export class Application extends Component {
           <ArrowBackIcon className="mb-3" />
         </Link>
         <Paper variant="outlined" elevation={2} className="grid-paper">
-          <Toolbar>
+          <Toolbar className="d-flex justify-content-between">
             <Typography variant="h6">{application.name} Application</Typography>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={this.deleteApplication}
+              startIcon={<DeleteIcon />}
+            >
+              Delete
+            </Button>
           </Toolbar>
           <Grid container spacing={1} className="grid-main">
             {fields}
@@ -175,15 +206,20 @@ export class Application extends Component {
 }
 
 Application.propTypes = {
-  application: PropTypes.object.isRequired,
-  editApplication: PropTypes.func.isRequired
+  application: PropTypes.object,
+  editApplication: PropTypes.func.isRequired,
+  deleteApplication: PropTypes.func.isRequired,
+  applicationMsg: PropTypes.string
 };
 
 const mapStateToProps = (state, ownProps) => ({
   application: _.find(state.application.applications, [
     '_id',
     ownProps.match.params._id
-  ])
+  ]),
+  applicationMsg: state.application.msg
 });
 
-export default connect(mapStateToProps, { editApplication })(Application);
+export default connect(mapStateToProps, { editApplication, deleteApplication })(
+  Application
+);

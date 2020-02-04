@@ -1,13 +1,4 @@
 import React, { Component } from 'react';
-import {
-  Alert,
-  Container,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button
-} from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -17,11 +8,20 @@ import {
 } from '../../actions/authActions';
 import { Redirect } from 'react-router-dom';
 
+// Material
+import { Alert } from '@material-ui/lab';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+
 export class ResetPassword extends Component {
   state = {
     password: '',
     passwordCheck: '',
     email: '',
+    pwdError: false,
     error: false,
     loading: true
   };
@@ -61,6 +61,7 @@ export class ResetPassword extends Component {
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    if (this.state.pwdError === true) this.setState({ pwdError: false });
   };
 
   onSubmit = e => {
@@ -69,7 +70,7 @@ export class ResetPassword extends Component {
 
     if (password !== passwordCheck) {
       this.setState({
-        msg: 'Passwords do not match.'
+        pwdError: true
       });
       return;
     }
@@ -102,37 +103,55 @@ export class ResetPassword extends Component {
       return (
         <div>
           <Container>
-            <h1>Reset password</h1>
-            {this.state.msg ? (
-              <Alert color="danger">{this.state.msg}</Alert>
-            ) : null}
-            <Form onSubmit={this.onSubmit}>
-              <FormGroup>
-                <Label for="name">Password</Label>
-                <Input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Password"
-                  className="mb-3"
-                  onChange={this.onChange}
-                  required
-                />
-                <Label for="name">Re-Type Password</Label>
-                <Input
-                  type="password"
-                  name="passwordCheck"
-                  id="passwordCheck"
-                  placeholder="Re-Type Password"
-                  className="mb-3"
-                  onChange={this.onChange}
-                  required
-                />
-                <Button color="dark" style={{ marginTop: '2rem' }} block>
-                  Reset Password
-                </Button>
-              </FormGroup>
-            </Form>
+            <div className="login-main">
+              <Paper className="login-card" variant="outlined">
+                <Typography className="mb-5 text-center" variant="h4">
+                  Reset password
+                </Typography>
+                {this.state.msg ? (
+                  <Alert color="danger">{this.state.msg}</Alert>
+                ) : null}
+                <form onSubmit={this.onSubmit}>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Password"
+                    name="password"
+                    type="password"
+                    onChange={this.onChange}
+                    required
+                    fullWidth
+                    error={this.state.pwdError}
+                    helperText={
+                      this.state.pwdError ? 'Passwords do not match' : ''
+                    }
+                  />
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Re-type password"
+                    name="passwordCheck"
+                    type="password"
+                    onChange={this.onChange}
+                    required
+                    fullWidth
+                    error={this.state.pwdError}
+                    helperText={
+                      this.state.pwdError ? 'Passwords do not match' : ''
+                    }
+                  />
+                  <Button
+                    type="submit"
+                    color="primary"
+                    style={{ marginTop: '2rem' }}
+                    className="float-right"
+                    block
+                  >
+                    Reset Password
+                  </Button>
+                </form>
+              </Paper>
+            </div>
           </Container>
         </div>
       );

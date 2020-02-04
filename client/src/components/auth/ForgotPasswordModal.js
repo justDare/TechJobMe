@@ -19,6 +19,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { Alert } from '@material-ui/lab';
 import Snackbar from '@material-ui/core/Snackbar';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -127,14 +130,16 @@ export class ForgotPasswordModal extends Component {
                   <Typography className="mb-5" variant="h4">
                     Send Password Reset Link
                   </Typography>
-                  <TextField
-                    onChange={this.onChange}
-                    className="mb-3"
-                    name="email"
-                    label="Account email"
-                    variant="outlined"
-                    fullWidth
-                  />
+                  <FormControl variant="outlined" className="mb-3" fullWidth>
+                    <InputLabel required htmlFor="outlined-adornment-password">
+                      Account Email
+                    </InputLabel>
+                    <OutlinedInput
+                      onChange={this.onChange}
+                      required={true}
+                      labelWidth={120}
+                    />
+                  </FormControl>
                   <Button
                     variant="contained"
                     className="w-50 mt-5"

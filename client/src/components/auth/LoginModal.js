@@ -98,17 +98,15 @@ class LoginModal extends Component {
         </div>
         <form onSubmit={this.onSubmit}>
           <FormControl variant="outlined" fullWidth>
-            <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
+            <InputLabel>Email</InputLabel>
             <OutlinedInput
               name="email"
+              type="email"
               onChange={this.onChange}
               className="mb-3"
               endAdornment={
                 <InputAdornment position="end">
-                  <AccountCircle
-                    aria-label="toggle password visibility"
-                    edge="end"
-                  ></AccountCircle>
+                  <AccountCircle edge="end"></AccountCircle>
                 </InputAdornment>
               }
               labelWidth={40}

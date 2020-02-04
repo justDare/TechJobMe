@@ -172,26 +172,31 @@ class RegisterModal extends Component {
                   <Typography className="mb-5" variant="h4">
                     Create Account
                   </Typography>
-                  <TextField
-                    onChange={this.onChange}
-                    className="mb-3"
-                    name="email"
-                    label="Email"
-                    variant="outlined"
-                    fullWidth
-                    required={true}
-                  />
-                  <TextField
-                    onChange={this.onChange}
-                    className="mb-3"
-                    name="name"
-                    label="Name"
-                    variant="outlined"
-                    fullWidth
-                    required={true}
-                  />
                   <FormControl variant="outlined" className="mb-3" fullWidth>
-                    <InputLabel htmlFor="outlined-adornment-password">
+                    <InputLabel required htmlFor="outlined-adornment-password">
+                      Email
+                    </InputLabel>
+                    <OutlinedInput
+                      onChange={this.onChange}
+                      name="email"
+                      required={true}
+                      labelWidth={55}
+                    />
+                  </FormControl>
+                  <FormControl variant="outlined" className="mb-3" fullWidth>
+                    <InputLabel required htmlFor="outlined-adornment-password">
+                      Name
+                    </InputLabel>
+                    <OutlinedInput
+                      onChange={this.onChange}
+                      name="name"
+                      required={true}
+                      labelWidth={60}
+                    />
+                  </FormControl>
+
+                  <FormControl variant="outlined" className="mb-3" fullWidth>
+                    <InputLabel required htmlFor="outlined-adornment-password">
                       Password
                     </InputLabel>
                     <OutlinedInput
@@ -214,11 +219,11 @@ class RegisterModal extends Component {
                           </IconButton>
                         </InputAdornment>
                       }
-                      labelWidth={70}
+                      labelWidth={85}
                     />
                   </FormControl>
                   <FormControl variant="outlined" fullWidth>
-                    <InputLabel htmlFor="outlined-adornment-password">
+                    <InputLabel required htmlFor="outlined-adornment-password">
                       Re-type Password
                     </InputLabel>
                     <OutlinedInput
@@ -241,7 +246,7 @@ class RegisterModal extends Component {
                           </IconButton>
                         </InputAdornment>
                       }
-                      labelWidth={70}
+                      labelWidth={140}
                     />
                   </FormControl>
                   <Button

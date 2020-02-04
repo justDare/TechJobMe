@@ -15,6 +15,15 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 
 export class ResetPassword extends Component {
   state = {
@@ -23,7 +32,9 @@ export class ResetPassword extends Component {
     email: '',
     pwdError: false,
     error: false,
-    loading: true
+    loading: true,
+    showPassword: false,
+    showCheck: false
   };
 
   static propTypes = {
@@ -64,6 +75,18 @@ export class ResetPassword extends Component {
     if (this.state.pwdError === true) this.setState({ pwdError: false });
   };
 
+  handleClickShowPassword = () => {
+    this.setState({
+      showPassword: !this.state.showPassword
+    });
+  };
+
+  handleClickShowCheck = () => {
+    this.setState({
+      showCheck: !this.state.showCheck
+    });
+  };
+
   onSubmit = e => {
     e.preventDefault();
     const { password, passwordCheck } = this.state;
@@ -96,7 +119,11 @@ export class ResetPassword extends Component {
     }
 
     if (loading) {
-      return <div>Loading...</div>;
+      return (
+        <Backdrop open="true">
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      );
     } else if (error) {
       return <div>Error</div>;
     } else {
@@ -112,34 +139,100 @@ export class ResetPassword extends Component {
                   <Alert color="danger">{this.state.msg}</Alert>
                 ) : null}
                 <form onSubmit={this.onSubmit}>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    label="Password"
-                    name="password"
-                    type="password"
-                    onChange={this.onChange}
-                    required
-                    fullWidth
-                    error={this.state.pwdError}
-                    helperText={
-                      this.state.pwdError ? 'Passwords do not match' : ''
-                    }
-                  />
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    label="Re-type password"
-                    name="passwordCheck"
-                    type="password"
-                    onChange={this.onChange}
-                    required
-                    fullWidth
-                    error={this.state.pwdError}
-                    helperText={
-                      this.state.pwdError ? 'Passwords do not match' : ''
-                    }
-                  />
+                  <FormControl variant="outlined" className="mb-3" fullWidth>
+                    <InputLabel required htmlFor="outlined-adornment-password">
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      type={this.state.showPassword ? 'text' : 'password'}
+                      onChange={this.onChange}
+                      name="password"
+                      required={true}
+                      error={this.state.pwdError}
+                      helperText={
+                        this.state.pwdError ? 'Passwords do not match' : ''
+                      }
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={this.handleClickShowPassword}
+                            edge="end"
+                          >
+                            {this.state.showPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      labelWidth={85}
+                    />
+                  </FormControl>
+                  <FormControl variant="outlined" fullWidth>
+                    <InputLabel required htmlFor="outlined-adornment-password">
+                      Re-type Password
+                    </InputLabel>
+                    <OutlinedInput
+                      type={this.state.showCheck ? 'text' : 'password'}
+                      onChange={this.onChange}
+                      name="passwordCheck"
+                      required={true}
+                      error={this.state.pwdError}
+                      helperText={
+                        this.state.pwdError ? 'Passwords do not match' : ''
+                      }
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={this.handleClickShowCheck}
+                            edge="end"
+                          >
+                            {this.state.showCheck ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      labelWidth={140}
+                    />
+                  </FormControl>
+                  {/* <FormControl variant="outlined" className="mb-3" fullWidth>
+                    <InputLabel required htmlFor="outlined-adornment-password">
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      onChange={this.onChange}
+                      name="password"
+                      type="password"
+                      required={true}
+                      labelWidth={85}
+                      error={this.state.pwdError}
+                      helperText={
+                        this.state.pwdError ? 'Passwords do not match' : ''
+                      }
+                    />
+                  </FormControl>
+                  <FormControl variant="outlined" className="mb-3" fullWidth>
+                    <InputLabel required htmlFor="outlined-adornment-password">
+                      Re-type Password
+                    </InputLabel>
+                    <OutlinedInput
+                      onChange={this.onChange}
+                      name="passwordCheck"
+                      type="password"
+                      required={true}
+                      labelWidth={145}
+                      error={this.state.pwdError}
+                      helperText={
+                        this.state.pwdError ? 'Passwords do not match' : ''
+                      }
+                    />
+                  </FormControl> */}
                   <Button
                     type="submit"
                     color="primary"

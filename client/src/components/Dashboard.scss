@@ -1,0 +1,40 @@
+$drawer-width: 240px;
+
+.side-bar {
+  @media screen and (min-width: 600px) {
+    width: $drawer-width;
+    flex-shrink: 0;
+  }
+
+  .drawer-desktop .MuiDrawer-paper {
+    top: 65px;
+    width: $drawer-width;
+  }
+}
+
+.MuiListItemIcon-root {
+  min-width: 36px !important;
+}
+
+.drawer-mobile .MuiDrawer-paper {
+  width: $drawer-width;
+}
+
+.MuiDrawer-paper {
+  z-index: 1000 !important;
+}
+
+.MuiAppBar-root {
+  z-index: 1000 !important;
+}
+
+.content {
+  flex-grow: 1;
+  margin-top: 64px;
+  padding-top: 15px;
+  min-height: 100vh;
+}
+
+.dash-loading {
+  z-index: 100 !important;
+}

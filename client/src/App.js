@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
-import AppNavbar from './components/AppNavbar';
-import JobApplications from './components/JobApplications';
-import ApplicationModal from './components/ApplicationModal';
-import { Container } from 'reactstrap';
-
-import { Provider } from 'react-redux';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import store from './store';
-import { loadUser } from './actions/authActions';
-
+import DashBoard from './components/DashBoard';
+import LoginLanding from './components/auth/LoginLanding';
+import { Provider } from 'react-redux';
+import PrivateRoute from './components/auth/PrivateRoute';
+import PasswordReset from './components/auth/ResetPassword';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import './App.scss';
 
 class App extends Component {
-  componentDidMount() {
-    store.dispatch(loadUser());
-  }
-
   render() {
     return (
       <Provider store={store}>
-        <div className="App">
-          <AppNavbar />
-          <Container>
-            <ApplicationModal />
-            <JobApplications />
-          </Container>
-        </div>
+        <Router>
+          <div className="App">
+            <Switch>
+              <Route exact path="/" component={LoginLanding} />
+              <Route
+                exact
+                path="/forgot-password/:token"
+                component={PasswordReset}
+              />
+              <PrivateRoute path="/dashboard" component={DashBoard} />
+            </Switch>
+          </div>
+        </Router>
       </Provider>
     );
   }

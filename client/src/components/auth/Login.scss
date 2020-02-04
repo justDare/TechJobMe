@@ -1,0 +1,39 @@
+@import '../../assets/variables.scss';
+
+.login-main {
+  height: 100vh;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+
+  .login-card {
+    padding: 50px 30px 70px 30px;
+
+    input {
+      background-color: transparent !important;
+    }
+
+    .login-form-footer {
+      align-items: center;
+
+      .forgot-password {
+        width: 550px;
+      }
+    }
+  }
+
+  @media screen and (min-width: 576px) {
+    margin: 0 auto;
+    max-width: 450px;
+  }
+}
+
+.modal-holder {
+  width: $modal-width;
+  margin: 0 auto;
+  padding: 50px 30px 70px 30px;
+
+  input {
+    background-color: transparent !important;
+  }
+}

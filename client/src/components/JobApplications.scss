@@ -1,0 +1,29 @@
+.application-row {
+  padding: 0.75rem 1.25rem;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+
+  .status {
+    height: 100%;
+    width: 50px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .status-yellow {
+    background-color: yellow;
+  }
+  .status-red {
+    background-color: red;
+  }
+  .status-blue {
+    background-color: blue;
+  }
+  .status-green {
+    background-color: green;
+  }
+  .status-purple {
+    background-color: purple;
+  }
+}

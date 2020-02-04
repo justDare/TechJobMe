@@ -6,14 +6,23 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  USER_EDIT_SUCCESS,
+  USER_EDIT_FAIL,
+  USER_DELETE,
+  PASSWORD_RESET_SENT,
+  CLEAR_AUTH_MSG,
+  RESET_TOKEN_OK,
+  RESET_TOKEN_ERROR,
+  PASSWORD_UPDATED_VIA_EMAIL
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   isLoading: false,
-  user: null
+  user: null,
+  msg: ''
 };
 
 export default function(state = initialState, action) {
@@ -50,6 +59,48 @@ export default function(state = initialState, action) {
         isAuthenticated: false,
         isLoading: false,
         user: null
+      };
+    case USER_EDIT_SUCCESS:
+      return {
+        ...state,
+        user: action.payload
+      };
+    case USER_EDIT_FAIL:
+      return {
+        ...state
+      };
+    case USER_DELETE:
+      localStorage.removeItem('token');
+      return {
+        ...state,
+        isAuthenticated: false,
+        user: null
+      };
+    case PASSWORD_RESET_SENT:
+      return {
+        ...state,
+        msg: action.payload
+      };
+    case CLEAR_AUTH_MSG:
+      return {
+        ...state,
+        msg: null
+      };
+    case RESET_TOKEN_OK:
+      return {
+        ...state,
+        user: action.payload,
+        msg: 'Token ok'
+      };
+    case RESET_TOKEN_ERROR:
+      return {
+        ...state,
+        msg: action.payload
+      };
+    case PASSWORD_UPDATED_VIA_EMAIL:
+      return {
+        ...state,
+        msg: action.payload
       };
     default:
       return state;

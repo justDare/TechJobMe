@@ -4,7 +4,7 @@ Technical-job tracking application built with the MERN stack, Redux and Material
 
 ## Website
 
-The app is currently hosted on heroku and can be found [here.](http://damp-thicket-76216.herokuapp.com/ 'Visit Site')
+The app is currently hosted on heroku and can be found [here.](https://damp-thicket-76216.herokuapp.com/ 'Visit Site')
 
 ## App Info
 

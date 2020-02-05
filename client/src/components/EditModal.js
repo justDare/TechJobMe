@@ -53,6 +53,7 @@ export class EditModal extends Component {
 
     // If edit successful, close modal
     if (this.props.modal && stateToUpdate !== prevProps.stateToUpdate) {
+      this.setState({ fieldInput: '' });
       this.props.toggle();
     }
   }
@@ -72,6 +73,11 @@ export class EditModal extends Component {
 
     const { editField, stateToUpdate } = this.props;
     const { fieldInput, passwordCheck, date } = this.state;
+
+    if (fieldInput === '' && editField !== 'date') {
+      this.props.toggle();
+      return;
+    }
 
     // Create user edit payload
     const payload = {};
@@ -149,7 +155,6 @@ export class EditModal extends Component {
   };
 
   render() {
-    console.log(this.props);
     const { modal, editField, editFieldUI } = this.props;
     let current = '';
     if (editField !== 'password') current = this.props.current;

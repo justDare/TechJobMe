@@ -125,7 +125,7 @@ export class ForgotPasswordModal extends Component {
                 className="login-card modal-holder text-center"
                 variant="outlined"
               >
-                <form>
+                <form onSubmit={this.onSubmit}>
                   <Typography className="mb-5" variant="h4">
                     Send Password Reset Link
                   </Typography>
@@ -143,7 +143,7 @@ export class ForgotPasswordModal extends Component {
                     variant="contained"
                     className="w-50 mt-5"
                     color="primary"
-                    onClick={this.onSubmit}
+                    type="submit"
                   >
                     Send
                   </Button>

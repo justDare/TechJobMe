@@ -200,38 +200,6 @@ export class ResetPassword extends Component {
                       labelWidth={140}
                     />
                   </FormControl>
-                  {/* <FormControl variant="outlined" className="mb-3" fullWidth>
-                    <InputLabel required htmlFor="outlined-adornment-password">
-                      Password
-                    </InputLabel>
-                    <OutlinedInput
-                      onChange={this.onChange}
-                      name="password"
-                      type="password"
-                      required={true}
-                      labelWidth={85}
-                      error={this.state.pwdError}
-                      helperText={
-                        this.state.pwdError ? 'Passwords do not match' : ''
-                      }
-                    />
-                  </FormControl>
-                  <FormControl variant="outlined" className="mb-3" fullWidth>
-                    <InputLabel required htmlFor="outlined-adornment-password">
-                      Re-type Password
-                    </InputLabel>
-                    <OutlinedInput
-                      onChange={this.onChange}
-                      name="passwordCheck"
-                      type="password"
-                      required={true}
-                      labelWidth={145}
-                      error={this.state.pwdError}
-                      helperText={
-                        this.state.pwdError ? 'Passwords do not match' : ''
-                      }
-                    />
-                  </FormControl> */}
                   <Button
                     type="submit"
                     color="primary"

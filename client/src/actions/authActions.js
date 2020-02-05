@@ -172,8 +172,6 @@ export const forgotPasswordEmail = email => (dispatch, getState) => {
   // Request body
   const body = JSON.stringify(email);
 
-  console.log(body);
-
   axios
     .post('api/auth/forgot-password', body, tokenConfig(getState))
     .then(response => {

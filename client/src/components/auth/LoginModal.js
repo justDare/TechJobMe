@@ -71,6 +71,12 @@ class LoginModal extends Component {
     });
   };
 
+  handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      this.onSubmit(e);
+    }
+  };
+
   onSubmit = e => {
     e.preventDefault();
 
@@ -96,7 +102,7 @@ class LoginModal extends Component {
         <div className="w-100 text-center mb-1">
           <img className="login-logo" src={Logo} alt="TechJobMe logo" />
         </div>
-        <form onSubmit={this.onSubmit}>
+        <form>
           <FormControl variant="outlined" fullWidth>
             <InputLabel>Email</InputLabel>
             <OutlinedInput
@@ -104,6 +110,7 @@ class LoginModal extends Component {
               type="email"
               onChange={this.onChange}
               className="mb-3"
+              onKeyDown={this.handleKeyDown}
               endAdornment={
                 <InputAdornment position="end">
                   <AccountCircle edge="end"></AccountCircle>
@@ -120,6 +127,7 @@ class LoginModal extends Component {
               type={this.state.showPassword ? 'text' : 'password'}
               onChange={this.onChange}
               name="password"
+              onKeyDown={this._handleKeyDown}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -145,6 +153,7 @@ class LoginModal extends Component {
               className="w-50"
               color="primary"
               type="submit"
+              onClick={this.onSubmit}
             >
               Login
             </Button>

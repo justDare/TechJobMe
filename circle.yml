@@ -23,11 +23,3 @@ deployment:
 
       # Deploy the app to heroku
       - git push https://git.heroku.com/damp-thicket-76216.git $CIRCLE_SHA1:refs/heads/master
-      # - |
-      #   curl -u $ASSERTIBLE_TOKEN: -XPOST --fail "https://assertible.com/deployments" -d'{
-      #     "service": "'"${ASSERTIBLE_SERVICE_ID}"'",
-      #     "environmentName": "production",
-      #     "version": "'"${CIRCLE_SHA1}"'",
-      #     "ref": "'"${CIRCLE_SHA1}"'",
-      #     "github": true
-      #   }'

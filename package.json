@@ -10,7 +10,7 @@
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
-    "test": "mocha test/index.js"
+    "test": "mocha jarvis/index.js"
   },
   "author": "Darian Sampare",
   "license": "MIT",

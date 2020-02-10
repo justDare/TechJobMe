@@ -14,7 +14,9 @@ workflows:
       - heroku/deploy-via-git: # Use the pre-configured job, deploy-via-git
           requires:
             - build
-
+          filters:
+            branches:
+              only: master
 jobs:
   build:
     docker:
@@ -45,5 +47,5 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
+      # run tests
       - run: npm test

@@ -1,25 +1,37 @@
-machine:
-  node:
-    version: 4.5.0
+# JavaScript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:7.10
 
-deployment:
-  production:
-    branch: test-feat
-    commands:
-      # The following few lines set up the heroku-toolbet CLI so we
-      # can deploy the app. Read more in the CircleCI docs:
-      # https://circleci.com/docs/1.0/continuous-deployment-with-heroku/
-      - |
-        cat >~/.netrc <<EOF
-        machine api.heroku.com
-          login $HEROKU_EMAIL
-          password $HEROKU_TOKEN
-        machine git.heroku.com
-          login $HEROKU_EMAIL
-          password $HEROKU_TOKEN
-        EOF
-      - chmod 600 ~/.netrc # Heroku cli complains about permissions without this
-      - '[[ ! -s "$(git rev-parse --git-dir)/shallow" ]] || git fetch --unshallow'
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
 
-      # Deploy the app to heroku
-      - git push https://git.heroku.com/damp-thicket-76216.git $CIRCLE_SHA1:refs/heads/master
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: npm test

@@ -4,7 +4,7 @@ machine:
 
 deployment:
   production:
-    branch: master
+    branch: test-feat
     commands:
       # The following few lines set up the heroku-toolbet CLI so we
       # can deploy the app. Read more in the CircleCI docs:

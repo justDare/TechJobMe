@@ -2,8 +2,8 @@
  * Tests for the express server
  */
 
-const request = require('supertest');
-const server = require('../server.js');
+// const request = require('supertest');
+// const server = require('../server.js');
 var assert = require('assert');
 
 describe('Array', function() {

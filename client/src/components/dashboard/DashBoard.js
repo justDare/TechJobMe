@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import JobApplications from '../components/JobApplications';
-import ApplicationModal from '../components/ApplicationModal';
+import JobApplications from './JobApplications';
+import ApplicationModal from './ApplicationModal';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   clearApplications,
   clearApplicationMsg
-} from '../actions/applicationActions';
-import store from '../store';
-import { loadUser, logout } from '../actions/authActions';
+} from '../../actions/applicationActions';
+import store from '../../store';
+import { loadUser, logout } from '../../actions/authActions';
 import { Route, Switch, Link, Redirect } from 'react-router-dom';
-import Account from './account/Account';
+import Account from './Account';
 import Application from './Application';
 import './Dashboard.scss';
 

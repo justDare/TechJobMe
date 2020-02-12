@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { editUser } from '../actions/authActions';
+import { editUser } from '../../actions/authActions';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 

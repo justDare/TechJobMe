@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import EditModal from '../EditModal';
+import EditModal from '../common/EditModal';
 import { editUser, deleteUser } from '../../actions/authActions';
-import PromptModal from '../PromptModal';
+import PromptModal from '../common/PromptModal';
 import store from '../../store';
 import { loadUser } from '../../actions/authActions';
 import { deleteAllApplications } from '../../actions/applicationActions';

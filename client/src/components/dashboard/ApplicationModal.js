@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addApplication } from '../actions/applicationActions';
+import { addApplication } from '../../actions/applicationActions';
 
 // Material
 import Fab from '@material-ui/core/Fab';

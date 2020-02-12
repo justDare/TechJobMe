@@ -5,9 +5,9 @@ import {
   getApplications,
   deleteApplication,
   deleteAllApplications
-} from '../actions/applicationActions';
+} from '../../actions/applicationActions';
 import PropTypes from 'prop-types';
-import { formatDateString } from '../utilities/helperFunctions';
+import { formatDateString } from '../../utilities/helperFunctions';
 import './JobApplications.scss';
 
 // Material

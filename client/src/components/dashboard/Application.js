@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Link, Redirect } from 'react-router-dom';
-import EditModal from '../components/EditModal';
+import EditModal from '../common/EditModal';
 import {
   editApplication,
   deleteApplication
-} from '../actions/applicationActions';
-import { formatDateString } from '../utilities/helperFunctions';
-import store from '../store';
-import { loadUser } from '../actions/authActions';
+} from '../../actions/applicationActions';
+import { formatDateString } from '../../utilities/helperFunctions';
+import store from '../../store';
+import { loadUser } from '../../actions/authActions';
 import './JobApplications.scss';
 
 // Material

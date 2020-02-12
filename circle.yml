@@ -23,9 +23,9 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:10.16.3
 
-    environment:
-      JWT: ${JWT}
-      mongoURI: ${mongoURI}
+    # environment:
+    # JWT: ${JWT}
+    # mongoURI: ${mongoURI}
 
     working_directory: ~/repo
 

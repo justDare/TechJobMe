@@ -8,6 +8,8 @@ app.use(express.json());
 // DB Config
 const db = process.env.mongoURI;
 
+console.log('? ' + process.env.mongoURI);
+
 // Connect to Mongo
 mongoose
   .connect(db, { useUnifiedTopology: true, useNewUrlParser: true })

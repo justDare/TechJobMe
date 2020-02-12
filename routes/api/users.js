@@ -7,10 +7,10 @@ const auth = require('../../middleware/auth');
 // JWT Config
 const jwtSecret = process.env.JWT || require('../../config/keys').jwt;
 
-// Application Model
+// User Model
 const User = require('../../models/User');
 
-// @route GET api/users
+// @route POST api/users
 // @desc  Register new User
 // @access Public
 router.post('/', (req, res) => {
@@ -79,6 +79,7 @@ router.post('/edit', auth, async (req, res) => {
     bcrypt.hash(field[1], 10).then(function(hash) {
       data['password'] = hash;
       User.findOneAndUpdate({ _id: _id }, data, { new: true }, (err, doc) => {
+        if (err) throw err;
         res.json(doc);
       });
     });
@@ -91,6 +92,7 @@ router.post('/edit', auth, async (req, res) => {
         projection: { _id: true, name: true, email: true, register_date: true }
       },
       (err, doc) => {
+        if (err) throw err;
         res.json(doc);
       }
     );

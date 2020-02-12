@@ -45,7 +45,7 @@ jobs:
       - run:
           name: Set node env variables
           command: |
-            JWT=$JWT MONGO_URI=$MONGO_URI node server.js
+            JWT=$JWT mongoURI=$mongoURI node server.js
 
       # run tests
       - run: npm test

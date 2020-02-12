@@ -3,7 +3,7 @@
  */
 
 // JWT Config
-const jwtSecret = process.env.JWT;
+const jwtSecret = process.env.JWT || require('../config/keys').jwt;
 const jwt = require('jsonwebtoken');
 
 const app = require('../server');

@@ -23,6 +23,10 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:10.16.3
 
+    environment:
+      JWT: $JWT
+      mongoURI: $mongoURI
+
     working_directory: ~/repo
 
     steps:
@@ -42,10 +46,9 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run:
-          name: Set node env variables
-          command: |
-            JWT=$JWT mongoURI=$mongoURI node server.js
+      # - run:
+      #     name: Set node env variables
+      #     command: |
 
       # run tests
       - run: npm test

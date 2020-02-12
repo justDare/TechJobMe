@@ -72,10 +72,9 @@ router.post('/edit', auth, (req, res) => {
 });
 
 // @route DELETE api/applications/delete-all
-// @desc Delete All Applications
+// @desc Delete All Applications attached to user id
 // @access Private
 router.delete('/delete-all/:id', auth, (req, res) => {
-  console.log(req.body);
   Application.deleteMany({ user_id: req.params.id })
     .then(result => res.json(result.deletedCount))
     .catch(err => res.json(err));

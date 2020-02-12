@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import LoginModal from '../auth/LoginModal';
-import RegisterModal from '../auth/RegisterModal';
+import LoginModal from '../login/LoginModal';
+import RegisterModal from '../login/RegisterModal';
 import './Login.scss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';

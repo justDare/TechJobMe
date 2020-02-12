@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import store from './store';
 import DashBoard from './components/DashBoard';
-import LoginLanding from './components/auth/LoginLanding';
+import LoginLanding from './components/login/LoginLanding';
 import { Provider } from 'react-redux';
-import PrivateRoute from './components/auth/PrivateRoute';
-import PasswordReset from './components/auth/ResetPassword';
+import PrivateRoute from './components/login/PrivateRoute';
+import PasswordReset from './components/login/ResetPassword';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 

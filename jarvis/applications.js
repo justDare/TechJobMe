@@ -57,6 +57,23 @@ describe('Test the applictions api!', () => {
       });
   });
 
+  it('Edit application', done => {
+    chai
+      .request(app)
+      .post('/api/applications/edit')
+      .set('x-auth-token', token)
+      .send({
+        _id: appId,
+        field: ['name', 'Some company edit']
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.name).to.equals('Some company edit');
+        appId = res.body._id;
+        done();
+      });
+  });
+
   it('Delete an application', done => {
     chai
       .request(app)
@@ -67,5 +84,61 @@ describe('Test the applictions api!', () => {
         expect(res.body.success).to.equals(true);
         done();
       });
+  });
+
+  describe('Group actions', () => {
+    // populate db with 2 applications for group tests
+    before(done => {
+      chai
+        .request(app)
+        .post('/api/applications')
+        .set('x-auth-token', token)
+        .send({
+          name: 'Some company 1',
+          position: 'intern',
+          stage: 'offer',
+          user_id: test_id
+        })
+        .end((err, res) => {
+          appId = res.body._id;
+          chai
+            .request(app)
+            .post('/api/applications')
+            .set('x-auth-token', token)
+            .send({
+              name: 'Some company 2',
+              position: 'intern',
+              stage: 'offer',
+              user_id: test_id
+            })
+            .end((err, res) => {
+              done();
+            });
+        });
+    });
+
+    it('Get all applications', done => {
+      chai
+        .request(app)
+        .get('/api/applications/' + test_id)
+        .set('x-auth-token', token)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.have.lengthOf(2);
+          done();
+        });
+    });
+
+    it('Delete all applications', done => {
+      chai
+        .request(app)
+        .delete('/api/applications/delete-all/' + test_id)
+        .set('x-auth-token', token)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.equals(2);
+          done();
+        });
+    });
   });
 });
